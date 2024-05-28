@@ -17,7 +17,6 @@ func NewUserService(db port.UserService) *UserService {
 }
 
 func (ur *UserService) FindUser(ctx *gin.Context, id string) (*domain.User, error) {
-	fmt.Println("FindUser", id)
 	salida, err := ur.db.Find(id)
 	if err != nil {
 		return nil, err
