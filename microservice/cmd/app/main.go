@@ -4,9 +4,13 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
-	"time"
+
+	"github.com/fxivan/set_up_server/microservice/configuration"
+	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
+	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/http"
+	dbRepository "github.com/fxivan/set_up_server/microservice/internal/adapter/storage"
+	service "github.com/fxivan/set_up_server/microservice/internal/core/service"
 )
 
 type ConnectDB struct {
@@ -28,8 +32,8 @@ func main() {
 	info_log := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	error_log := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 	//go run . -srvPort 8000 -srvAddr localhost
-	server_addr := flag.String("srvAddr", "", "HTTP server network address")
-	server_port := flag.Int("srvPort", 4000, "HTTP server network port")
+	//server_addr := flag.String("srvAddr", "", "HTTP server network address")
+	//server_port := flag.Int("srvPort", 4000, "HTTP server network port")
 	input_engine := flag.String("enginedb", "", "Engine DB")
 	input_host := flag.String("hostdb", "localhost", "Host DB")
 	input_port := flag.Int("portdb", 3360, "Port DB")
@@ -38,33 +42,44 @@ func main() {
 	input_dbname := flag.String("dbname", "", "Name DB")
 	flag.Parse()
 
-	conn_obj := &ConnectDB{
-		Engine:   input_engine,
-		Host:     input_host,
-		Port:     input_port,
-		User:     input_user,
-		Password: input_password,
-		DBName:   input_dbname,
+	config, err := config.New()
+	if err != nil {
+		error_log.Println(err)
+		os.Exit(1)
 	}
 
-	app := &application{
-		error_log: error_log,
-		info_log:  info_log,
-		connDB:    conn_obj,
+	configDB := configuration.Configuration{
+		Engine:   *input_engine,
+		Host:     *input_host,
+		Port:     *input_port,
+		User:     *input_user,
+		Password: *input_password,
+		DBName:   *input_dbname,
 	}
 
-	serverURI := fmt.Sprintf("%s:%d", *server_addr, *server_port)
-
-	srv := &http.Server{
-		Addr:         serverURI,
-		ErrorLog:     error_log,
-		Handler:      app.routes(),
-		IdleTimeout:  time.Minute,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
+	repo, err := dbRepository.New(&configDB)
+	if err != nil {
+		panic(err)
 	}
 
-	info_log.Printf("Starting server on %s", serverURI)
-	err := srv.ListenAndServe()
-	error_log.Fatal(err)
+	userService := service.NewUserService(repo)
+	userHandler := http.NewUserHandler(userService)
+
+	router, err := http.NewRouter(
+		config.HTTP,
+		*userHandler,
+	)
+
+	if err != nil {
+		error_log.Println(err)
+		os.Exit(1)
+	}
+
+	listenAddr := fmt.Sprintf("%s:%s", config.HTTP.URL, config.HTTP.Port)
+	info_log.Printf("Starting server on %s", listenAddr)
+	err = router.Serve(listenAddr)
+	if err != nil {
+		error_log.Println(err)
+		os.Exit(1)
+	}
 }

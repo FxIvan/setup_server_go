@@ -31,7 +31,7 @@ func New(config *configuration.Configuration) (*Redis, error) {
 	}, nil
 }
 
-func (r *Redis) Find(id int) (*domain.User, error) {
+func (r *Redis) Find(id string) (*domain.User, error) {
 	return nil, nil
 }
 

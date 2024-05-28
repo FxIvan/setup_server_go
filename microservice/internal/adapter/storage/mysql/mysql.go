@@ -29,9 +29,9 @@ func New(config *configuration.Configuration) (*MySQL, error) {
 	return &MySQL{DB: db}, nil
 }
 
-func (m *MySQL) Find(id int) (*domain.User, error) {
+func (m *MySQL) Find(id string) (*domain.User, error) {
 	objExample := &domain.User{
-		ID:        1,
+		ID:        "a1sd",
 		Name:      "John Doe",
 		Email:     "",
 		Password:  "password",
