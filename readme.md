@@ -1,5 +1,5 @@
 ## Ejecutar Go cmd/app
-> go run . -enginedb mongodb -portdb 27017 -userdb almendra -passwordb 1ASWWWaeq -dbname user
+> go run . -enginedb mongodb -portdb 27017 -userdb almendra -passwordb 1ASWWWaeq -dbname microservicio
 
 ## Ejecutar contenedor docker
 > sudo docker run -d -p 27017:27017 --name mongodb-container -e MONGO_INITDB_ROOT_USERNAME=almendra -e MONGO_INITDB_ROOT_PASSWORD="1ASWWWaeq" -v mongodb-data:/data/db mongo

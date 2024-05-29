@@ -8,5 +8,5 @@ type UserService interface {
 	Find(id string) (*domain.User, error)
 	Save(data string) (*domain.User, error)
 	FindKey(key string) (*domain.User, error)
-	CreateUserDB(userModel domain.User) (string, error)
+	CreateUserStorage(userModel *domain.User) (string, error)
 }

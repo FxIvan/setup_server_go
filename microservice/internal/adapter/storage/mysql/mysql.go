@@ -58,6 +58,6 @@ func (m *MySQL) Save(data string) (*domain.User, error) {
 	return nil, nil
 }
 
-func (m *MySQL) CreateUserDB(userModel domain.User) (string, error) {
+func (m *MySQL) CreateUserStorage(userModel *domain.User) (string, error) {
 	return "", nil
 }

@@ -9,9 +9,7 @@ Flujo de datos: HTTP Request -> NeUserHandler(req,res) -> UserService(Controlado
 *************************/
 
 import (
-	"time"
-
-	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
+	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/request"
 	"github.com/fxivan/set_up_server/microservice/internal/core/service"
 	"github.com/gin-gonic/gin"
 )
@@ -24,18 +22,27 @@ type getUserRequest struct {
 	ID string `uri:"id" binding:"required"`
 }
 
-type RegisterUserRequest struct {
-	Name     string `json:"name" binding:"required"`
-	Email    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
-	Role     string `json:"role" binding:"required"`
-}
-
 // NewUserHandler creates a new UserHandler instance
 func NewUserHandler(svc *service.UserService) *UserHandler {
 	return &UserHandler{
 		svc,
 	}
+}
+
+// Registro de usuario HTTP
+func (uh *UserHandler) RegisterUserHTTP(ctx *gin.Context) {
+	var user request.RegisterUserRequest
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		handleError(ctx, err)
+		return
+	}
+	text, err := uh.svc.CreateUserService(&user)
+	if err != nil {
+		handleError(ctx, err)
+		return
+	}
+
+	handleSuccess(ctx, text)
 }
 
 // FindUserByID retrieves a user by its ID
@@ -54,29 +61,4 @@ func (uh *UserHandler) FindUserByID(ctx *gin.Context) {
 
 	rsp := newUserResponse(user)
 	handleSuccess(ctx, rsp)
-}
-
-func (uh *UserHandler) RegisterUser(ctx *gin.Context) {
-	var user RegisterUserRequest
-	if err := ctx.ShouldBindJSON(&user); err != nil {
-		handleError(ctx, err)
-		return
-	}
-
-	userModel := &domain.User{
-		Name:      user.Name,
-		Email:     user.Email,
-		Password:  user.Password,
-		Role:      domain.UserRole(user.Role),
-		CreatedAt: time.Time{},
-		UpdatedAt: time.Time{},
-	}
-
-	text, err := uh.svc.CreateUser(userModel)
-	if err != nil {
-		handleError(ctx, err)
-		return
-	}
-
-	handleSuccess(ctx, text)
 }

@@ -48,7 +48,7 @@ func New(config *configuration.Configuration) (*MongoDB, error) {
 	}
 
 	db := client.Database(config.DBName)
-	collection := db.Collection("product")
+	collection := db.Collection("microservicio")
 
 	return &MongoDB{
 		Client:     client,
@@ -134,7 +134,7 @@ func (m *MongoDB) Save(data string) (*domain.User, error) {
 	return nil, nil
 }
 
-func (m *MongoDB) CreateUserDB(userModel domain.User) (string, error) {
+func (m *MongoDB) CreateUserStorage(userModel *domain.User) (string, error) {
 	_, err := m.Collection.InsertOne(context.Background(), bson.M{"data": userModel})
 	if err != nil {
 		return "", err
