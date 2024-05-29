@@ -31,27 +31,6 @@ func New(config *configuration.Configuration) (*Redis, error) {
 	}, nil
 }
 
-func (r *Redis) Find(id string) (*domain.User, error) {
-	return nil, nil
-}
-
-func (r *Redis) FindKey(key string) (*domain.User, error) {
-	val, err := r.connRedis.Get(context.Background(), key).Result()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(val)
-	return nil, nil
-}
-
-func (r *Redis) Save(data string) (*domain.User, error) {
-	err := r.connRedis.Set(context.Background(), "comida", data, 0).Err()
-	if err != nil {
-		return nil, err
-	}
-	return nil, nil
-}
-
-func (m *Redis) CreateUserStorage(userModel *domain.User) (string, error) {
+func (m *Redis) CreateUserStorage(userModel *domain.User, collectionName string) (string, error) {
 	return "", nil
 }
