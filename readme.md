@@ -7,7 +7,7 @@
 ### En caso de este error
 >docker: Error response from daemon: Conflict. The container name "/mongodb-container" is already in use by container "c2d38b2113b05c511f85526835a2b02de0604623f66cb567976db28f4a6d5496". You have to remove (or rename) that container to be able to reuse that name.
 
-`Hacer los siguientes pasos`
-[^1]: docker stop mongodb-container
-[^2]: docker rm mongodb-container
-[^3]: Ejecutar otra vez el comando `docker run ...`
+### Hacer los siguientes pasos`
+`docker stop mongodb-container`
+`docker rm mongodb-container`
+`Ejecutar otra vez el comando docker run ...`
