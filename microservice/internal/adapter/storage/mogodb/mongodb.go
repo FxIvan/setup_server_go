@@ -133,3 +133,12 @@ func (m *MongoDB) Save(data string) (*domain.User, error) {
 	fmt.Printf("function Save | data to MongoDB %s", data)
 	return nil, nil
 }
+
+func (m *MongoDB) CreateUserDB(userModel domain.User) (string, error) {
+	_, err := m.Collection.InsertOne(context.Background(), bson.M{"data": userModel})
+	if err != nil {
+		return "", err
+	}
+
+	return "User Created", nil
+}

@@ -33,3 +33,12 @@ func (ur *UserService) FindUser(ctx *gin.Context, id string) (*domain.User, erro
 
 	return userObj, nil
 }
+
+func (m *UserService) CreateUser(userModel *domain.User) (string, error) {
+	salida, err := m.db.CreateUserDB(*userModel)
+	if err != nil {
+		return "", err
+	}
+
+	return salida, nil
+}

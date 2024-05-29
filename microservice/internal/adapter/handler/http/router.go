@@ -39,6 +39,7 @@ func NewRouter(
 	{
 		user := v1.Group("/user")
 		user.GET("/:id", userHandler.FindUserByID)
+		user.POST("/register", userHandler.RegisterUser)
 	}
 
 	return &Router{router}, nil

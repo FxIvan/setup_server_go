@@ -57,3 +57,7 @@ func (m *MySQL) Save(data string) (*domain.User, error) {
 	fmt.Printf("Function Save | data to mysql %s", data)
 	return nil, nil
 }
+
+func (m *MySQL) CreateUserDB(userModel domain.User) (string, error) {
+	return "", nil
+}

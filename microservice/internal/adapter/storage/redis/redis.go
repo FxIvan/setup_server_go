@@ -51,3 +51,7 @@ func (r *Redis) Save(data string) (*domain.User, error) {
 	}
 	return nil, nil
 }
+
+func (m *Redis) CreateUserDB(userModel domain.User) (string, error) {
+	return "", nil
+}
