@@ -58,3 +58,7 @@ func (m *MySQL) CreateUserStorage(userModel *domain.User, collectionName string)
 	fmt.Printf("Function Save | data to MySQL %s", userModel)
 	return "User Created", nil
 }
+
+func (m *MySQL) GetUserEmailStorage(userEmail string, collectionName string) (*domain.User, error) {
+	return nil, nil
+}

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/fxivan/set_up_server/microservice/configuration"
+	mongodbModel "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -55,10 +56,32 @@ func New(config *configuration.Configuration) (*MongoDB, error) {
 
 func (m *MongoDB) CreateUserStorage(userModel *domain.User, collectionName string) (string, error) {
 	collection := m.Database.Collection(collectionName)
-	_, err := collection.InsertOne(context.Background(), bson.M{"data": userModel})
+	_, err := collection.InsertOne(context.Background(), userModel)
 	if err != nil {
 		return "", err
 	}
 
 	return "User Created", nil
+}
+
+func (m *MongoDB) GetUserEmailStorage(userEmail string, collectionName string) (*domain.User, error) {
+	collection := m.Database.Collection(collectionName)
+	var result mongodbModel.UserModelMongoDB
+	filter := bson.M{"email": userEmail}
+	err := collection.FindOne(context.TODO(), filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+
+	userModelDomain := &domain.User{
+		ID:        result.ID.Hex(),
+		Name:      result.Name,
+		Email:     result.Email,
+		Password:  result.Password,
+		Role:      domain.UserRole(result.Role),
+		CreatedAt: result.CreatedAt,
+		UpdatedAt: result.UpdatedAt,
+	}
+
+	return userModelDomain, nil
 }

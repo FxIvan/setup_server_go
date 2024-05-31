@@ -40,3 +40,19 @@ func (uh *UserHandler) RegisterUserHTTP(ctx *gin.Context) {
 
 	handleSuccess(ctx, text)
 }
+
+func (uh *UserHandler) LoginUserHTTP(ctx *gin.Context) {
+	var user request.LoginUserRequest
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		handleError(ctx, err)
+		return
+	}
+
+	token, err := uh.svc.LoginUserService(&user)
+	if err != nil {
+		handleError(ctx, err)
+		return
+
+	}
+	handleSuccess(ctx, token)
+}

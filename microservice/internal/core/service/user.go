@@ -33,3 +33,17 @@ func (m *UserService) CreateUserService(userModel *request.RegisterUserRequest) 
 
 	return salida, nil
 }
+
+func (m *UserService) LoginUserService(userModel *request.LoginUserRequest) (*domain.User, error) {
+	modelUser := &domain.User{
+		Email:    userModel.Email,
+		Password: userModel.Password,
+	}
+
+	infoUser, err := m.db.GetUserEmailStorage(modelUser.Email, "users")
+	if err != nil {
+		return nil, err
+	}
+
+	return infoUser, nil
+}

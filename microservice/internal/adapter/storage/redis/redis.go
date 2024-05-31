@@ -34,3 +34,7 @@ func New(config *configuration.Configuration) (*Redis, error) {
 func (m *Redis) CreateUserStorage(userModel *domain.User, collectionName string) (string, error) {
 	return "", nil
 }
+
+func (m *Redis) GetUserEmailStorage(userEmail string, collectionName string) (*domain.User, error) {
+	return nil, nil
+}
