@@ -18,6 +18,11 @@ type UserHandler struct {
 	svc *service.UserService
 }
 
+type listUsersRequest struct {
+	Skip  uint64 `form:"skip" binding:"required,min=0" example:"0"`
+	Limit uint64 `form:"limit" binding:"required,min=5" example:"5"`
+}
+
 // NewUserHandler creates a new UserHandler instance
 func NewUserHandler(svc *service.UserService) *UserHandler {
 	return &UserHandler{
@@ -39,4 +44,15 @@ func (uh *UserHandler) RegisterUserHTTP(ctx *gin.Context) {
 	}
 
 	handleSuccess(ctx, text)
+}
+
+func (uh *UserHandler) ListUserHTTP(ctx *gin.Context) {
+	var req listUsersRequest
+	listUser, err := uh.svc.GetListUserService(ctx, req.Skip, req.Limit)
+	if err != nil {
+		handleError(ctx, err)
+		return
+	}
+
+	handleSuccess(ctx, listUser)
 }

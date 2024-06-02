@@ -79,6 +79,7 @@ func main() {
 
 	router, err := http.NewRouter(
 		config.HTTP,
+		token,
 		*userHandler,
 		*authHandler,
 	)

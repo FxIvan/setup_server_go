@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"time"
 
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/request"
@@ -38,4 +39,15 @@ func (m *UserService) CreateUserService(userModel *request.RegisterUserRequest) 
 	}
 
 	return salida, nil
+}
+
+func (m *UserService) GetListUserService(ctx context.Context, skip, limit uint64) ([]domain.User, error) {
+	var users []domain.User
+
+	users, err := m.db.ListUsersStorage("users")
+	if err != nil {
+		return nil, domain.ErrDataNotFound
+	}
+
+	return users, nil
 }

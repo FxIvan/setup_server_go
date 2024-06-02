@@ -85,3 +85,17 @@ func (m *MongoDB) GetUserEmailStorage(userEmail string, collectionName string) (
 
 	return userModelDomain, nil
 }
+
+func (m *MongoDB) ListUsersStorage(collectionName string) ([]domain.User, error) {
+	var userList []domain.User
+	collection := m.Database.Collection(collectionName)
+
+	cur, err := collection.Find(context.TODO(), bson.D{})
+	if err != nil {
+		return nil, domain.ErrDataNotFound
+	}
+	if err = cur.All(context.Background(), &userList); err != nil {
+		return nil, domain.ErrDataNotFound
+	}
+	return userList, nil
+}

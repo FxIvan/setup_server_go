@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
+	"github.com/fxivan/set_up_server/microservice/internal/core/port"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	sloggin "github.com/samber/slog-gin"
@@ -18,6 +19,7 @@ type Router struct {
 
 func NewRouter(
 	config *config.HTTP,
+	token port.TokenService,
 	userHandler UserHandler,
 	authHandler AuthHandler,
 ) (*Router, error) {
@@ -42,6 +44,11 @@ func NewRouter(
 		{
 			user.POST("/register", userHandler.RegisterUserHTTP)
 			user.POST("/login", authHandler.LoginUserHTTP)
+		}
+
+		authUser := user.Group("/").Use(authMiddleware(token))
+		{
+			authUser.GET("/", userHandler.ListUserHTTP)
 		}
 	}
 

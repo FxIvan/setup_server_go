@@ -7,4 +7,5 @@ import (
 type UserService interface {
 	CreateUserStorage(userModel *domain.User, collectionName string) (string, error)
 	GetUserEmailStorage(userEmail string, collectionName string) (*domain.User, error)
+	ListUsersStorage(collectionName string) ([]domain.User, error)
 }

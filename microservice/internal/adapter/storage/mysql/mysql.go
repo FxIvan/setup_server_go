@@ -62,3 +62,7 @@ func (m *MySQL) CreateUserStorage(userModel *domain.User, collectionName string)
 func (m *MySQL) GetUserEmailStorage(userEmail string, collectionName string) (*domain.User, error) {
 	return nil, nil
 }
+
+func (m *MySQL) ListUsersStorage(collectionName string) ([]domain.User, error) {
+	return nil, nil
+}

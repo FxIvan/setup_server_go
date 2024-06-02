@@ -88,6 +88,16 @@ func newErrorResponse(errMsgs []string) errorResponse {
 	}
 }
 
+func handleAbort(ctx *gin.Context, err error) {
+	statusCode, ok := errorStatusMap[err]
+	if !ok {
+		statusCode = http.StatusInternalServerError
+	}
+	errMsg := parseError(err)
+	errRsp := newErrorResponse(errMsg)
+	ctx.AbortWithStatusJSON(statusCode, errRsp)
+}
+
 func handleError(ctx *gin.Context, err error) {
 	statusCode, ok := errorStatusMap[err]
 	if !ok {
