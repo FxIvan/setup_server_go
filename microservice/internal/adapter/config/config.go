@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -8,8 +9,9 @@ import (
 
 type (
 	Container struct {
-		HTTP  *HTTP
-		Token *Token
+		HTTP        *HTTP
+		Token       *Token
+		TerminalLog *TerminalLog
 	}
 
 	Token struct {
@@ -23,6 +25,11 @@ type (
 		URL            string
 		Port           string
 		AllowedOrigins string
+	}
+
+	TerminalLog struct {
+		ErrorLog *log.Logger
+		InfoLog  *log.Logger
 	}
 )
 
@@ -47,8 +54,14 @@ func New() (*Container, error) {
 		Duration:   os.Getenv("TOKEN_DURATION"),
 	}
 
+	terminalLog := &TerminalLog{
+		ErrorLog: log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
+		InfoLog:  log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
+	}
+
 	return &Container{
 		http,
 		token,
+		terminalLog,
 	}, nil
 }

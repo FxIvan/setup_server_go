@@ -1,4 +1,4 @@
-package main
+package pasetoKey
 
 import (
 	"crypto/ed25519"

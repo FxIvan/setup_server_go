@@ -63,7 +63,7 @@ func main() {
 		panic(err)
 	}
 
-	token, err := paseto.New(config.Token)
+	token, err := paseto.New(config.Token, config.TerminalLog)
 	if err != nil {
 		error_log.Println(err)
 		os.Exit(1)
@@ -74,7 +74,7 @@ func main() {
 	userHandler := http.NewUserHandler(userService)
 
 	//Auth
-	authService := service.NewAuthService(repo, token)
+	authService := service.NewAuthService(repo, token, config.TerminalLog)
 	authHandler := http.NewAuthHandler(authService)
 
 	router, err := http.NewRouter(

@@ -3,7 +3,6 @@ package paseto
 import (
 	"crypto/ed25519"
 	"encoding/hex"
-	"fmt"
 	"time"
 
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
@@ -14,19 +13,21 @@ import (
 )
 
 type PasetoToken struct {
-	token      *paseto.JSONToken
-	privateKey ed25519.PrivateKey
-	publicKey  ed25519.PublicKey
-	duration   time.Duration
+	token       *paseto.JSONToken
+	privateKey  ed25519.PrivateKey
+	publicKey   ed25519.PublicKey
+	duration    time.Duration
+	terminalLog *config.TerminalLog
 }
 
-func New(config *config.Token) (port.TokenService, error) {
+func New(config *config.Token, logTerminal *config.TerminalLog) (port.TokenService, error) {
 	durationStr := config.Duration
 	privateKey := config.PrivateKey
 	publicKey := config.PublicKey
 
 	duration, err := time.ParseDuration(durationStr)
 	if err != nil {
+		logTerminal.ErrorLog.Println(err)
 		return nil, domain.ErrTokenDuration
 	}
 
@@ -41,11 +42,13 @@ func New(config *config.Token) (port.TokenService, error) {
 
 	privateKeyBytes, err := hex.DecodeString(privateKey)
 	if err != nil {
+		logTerminal.ErrorLog.Println(err)
 		return nil, err
 	}
 
 	publicKeyBytes, err := hex.DecodeString(publicKey)
 	if err != nil {
+		logTerminal.ErrorLog.Println(err)
 		return nil, err
 	}
 
@@ -53,17 +56,18 @@ func New(config *config.Token) (port.TokenService, error) {
 	parsePublicKey := ed25519.PublicKey(publicKeyBytes)
 
 	return &PasetoToken{
-		token:      &token,
-		privateKey: parsePrivateKey,
-		publicKey:  parsePublicKey,
-		duration:   duration,
+		token:       &token,
+		privateKey:  parsePrivateKey,
+		publicKey:   parsePublicKey,
+		duration:    duration,
+		terminalLog: logTerminal,
 	}, nil
 }
 
 func (pt *PasetoToken) CreateToken(userModel *domain.User) (string, error) {
 	id, err := uuid.NewRandom()
 	if err != nil {
-		fmt.Println(err)
+		pt.terminalLog.ErrorLog.Println(err)
 		return "", domain.ErrTokenCreation
 	}
 
@@ -78,12 +82,11 @@ func (pt *PasetoToken) CreateToken(userModel *domain.User) (string, error) {
 	pt.token.Set("Role", string(payload.Role))
 	footer := "some footer"
 	v2 := paseto.NewV2()
-	fmt.Println(pt.privateKey)
 
 	//Sign data
 	token, err := v2.Sign(pt.privateKey, *pt.token, paseto.ParseFooter(footer, nil))
 	if err != nil {
-		fmt.Println(err)
+		pt.terminalLog.ErrorLog.Println(err)
 		return "", domain.ErrTokenCreation
 	}
 
@@ -99,6 +102,7 @@ func (pt *PasetoToken) VerifyToken(token string) (*domain.TokenPayload, error) {
 
 	err := v2.Verify(token, pt.publicKey, &newJsonToken, &newFooter)
 	if err != nil {
+		pt.terminalLog.ErrorLog.Println(err)
 		return nil, domain.ErrInvalidToken
 	}
 
