@@ -19,6 +19,7 @@ type Router struct {
 func NewRouter(
 	config *config.HTTP,
 	userHandler UserHandler,
+	authHandler AuthHandler,
 ) (*Router, error) {
 	if config.Env == "production" {
 		gin.SetMode(gin.ReleaseMode)
@@ -40,7 +41,7 @@ func NewRouter(
 		user := v1.Group("/user")
 		{
 			user.POST("/register", userHandler.RegisterUserHTTP)
-			user.POST("/login", userHandler.LoginUserHTTP)
+			user.POST("/login", authHandler.LoginUserHTTP)
 		}
 	}
 

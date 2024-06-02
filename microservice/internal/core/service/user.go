@@ -6,6 +6,7 @@ import (
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/request"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/fxivan/set_up_server/microservice/internal/core/port"
+	"github.com/fxivan/set_up_server/microservice/internal/core/util"
 )
 
 type UserService struct {
@@ -18,10 +19,15 @@ func NewUserService(db port.UserService) *UserService {
 
 func (m *UserService) CreateUserService(userModel *request.RegisterUserRequest) (string, error) {
 
+	hashedPassword, err := util.HashPassword(userModel.Password)
+	if err != nil {
+		return "", err
+	}
+
 	modelUser := &domain.User{
 		Name:      userModel.Name,
 		Email:     userModel.Email,
-		Password:  userModel.Password,
+		Password:  hashedPassword,
 		Role:      domain.UserRole(userModel.Role),
 		CreatedAt: time.Time{},
 		UpdatedAt: time.Time{},
@@ -32,18 +38,4 @@ func (m *UserService) CreateUserService(userModel *request.RegisterUserRequest) 
 	}
 
 	return salida, nil
-}
-
-func (m *UserService) LoginUserService(userModel *request.LoginUserRequest) (*domain.User, error) {
-	modelUser := &domain.User{
-		Email:    userModel.Email,
-		Password: userModel.Password,
-	}
-
-	infoUser, err := m.db.GetUserEmailStorage(modelUser.Email, "users")
-	if err != nil {
-		return nil, err
-	}
-
-	return infoUser, nil
 }

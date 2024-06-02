@@ -8,7 +8,14 @@ import (
 
 type (
 	Container struct {
-		HTTP *HTTP
+		HTTP  *HTTP
+		Token *Token
+	}
+
+	Token struct {
+		PublicKey  string
+		PrivateKey string
+		Duration   string
 	}
 
 	HTTP struct {
@@ -34,7 +41,14 @@ func New() (*Container, error) {
 		AllowedOrigins: os.Getenv("HTTP_ALLOWED_ORIGINS"),
 	}
 
+	token := &Token{
+		PrivateKey: os.Getenv("PRIVATE_KEY"),
+		PublicKey:  os.Getenv("PUBLIC_KEY"),
+		Duration:   os.Getenv("TOKEN_DURATION"),
+	}
+
 	return &Container{
-		HTTP: http,
+		http,
+		token,
 	}, nil
 }

@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/fxivan/set_up_server/microservice/configuration"
+	"github.com/fxivan/set_up_server/microservice/internal/adapter/auth/paseto"
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/http"
 	dbRepository "github.com/fxivan/set_up_server/microservice/internal/adapter/storage"
@@ -62,12 +63,24 @@ func main() {
 		panic(err)
 	}
 
+	token, err := paseto.New(config.Token)
+	if err != nil {
+		error_log.Println(err)
+		os.Exit(1)
+	}
+
+	//User
 	userService := service.NewUserService(repo)
 	userHandler := http.NewUserHandler(userService)
+
+	//Auth
+	authService := service.NewAuthService(repo, token)
+	authHandler := http.NewAuthHandler(authService)
 
 	router, err := http.NewRouter(
 		config.HTTP,
 		*userHandler,
+		*authHandler,
 	)
 
 	if err != nil {
