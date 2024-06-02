@@ -50,3 +50,16 @@ func authMiddleware(token port.TokenService) gin.HandlerFunc {
 		ctx.Next()
 	}
 }
+
+func adminAuthMiddleware() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		payload := getAuthPayload(ctx, authorizationPayloadKey)
+		isAdmin := payload.Role == domain.Admin
+		if !isAdmin {
+			err := domain.ErrForbidden
+			handleAbort(ctx, err)
+			return
+		}
+		ctx.Next()
+	}
+}
