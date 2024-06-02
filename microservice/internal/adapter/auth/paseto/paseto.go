@@ -73,9 +73,9 @@ func (pt *PasetoToken) CreateToken(userModel *domain.User) (string, error) {
 		Role:   userModel.Role,
 	}
 
-	pt.token.Set("id", payload.ID.String())
-	pt.token.Set("userID", payload.UserID)
-	pt.token.Set("role", string(payload.Role))
+	pt.token.Set("ID", payload.ID.String())
+	pt.token.Set("UserID", payload.UserID)
+	pt.token.Set("Role", string(payload.Role))
 	footer := "some footer"
 	v2 := paseto.NewV2()
 	fmt.Println(pt.privateKey)
@@ -88,4 +88,25 @@ func (pt *PasetoToken) CreateToken(userModel *domain.User) (string, error) {
 	}
 
 	return token, nil
+}
+
+func (pt *PasetoToken) VerifyToken(token string) (*domain.TokenPayload, error) {
+
+	var newJsonToken domain.TokenPayload
+	var newFooter string
+
+	v2 := paseto.NewV2()
+
+	err := v2.Verify(token, pt.publicKey, &newJsonToken, &newFooter)
+	if err != nil {
+		return nil, domain.ErrInvalidToken
+	}
+
+	userModelToken := &domain.TokenPayload{
+		ID:     newJsonToken.ID,
+		UserID: newJsonToken.UserID,
+		Role:   newJsonToken.Role,
+	}
+
+	return userModelToken, nil
 }

@@ -8,6 +8,7 @@ import (
 
 type TokenService interface {
 	CreateToken(userModel *domain.User) (string, error)
+	VerifyToken(token string) (*domain.TokenPayload, error)
 }
 
 type AuthService interface {

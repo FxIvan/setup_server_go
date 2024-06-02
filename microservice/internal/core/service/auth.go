@@ -29,5 +29,10 @@ func (au *AuthService) Login(ctx context.Context, email string, password string)
 		return "", err
 	}
 
+	_, err = au.ts.VerifyToken(accesToken)
+	if err != nil {
+		return "", err
+	}
+
 	return accesToken, nil
 }
