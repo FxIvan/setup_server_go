@@ -4,7 +4,9 @@ import (
 	"context"
 
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
+	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/fxivan/set_up_server/microservice/internal/core/port"
+	"github.com/fxivan/set_up_server/microservice/internal/core/util"
 )
 
 type AuthService struct {
@@ -28,16 +30,22 @@ func (au *AuthService) Login(ctx context.Context, email string, password string)
 		return "", err
 	}
 
+	err = util.ComparePassword(password, user.Password)
+	if err != nil {
+		au.log.ErrorLog.Println(err)
+		return "", domain.ErrInvalidCredentials
+	}
+
 	accesToken, err := au.ts.CreateToken(user)
 	if err != nil {
 		au.log.ErrorLog.Println(err)
 		return "", err
 	}
 
-	_, err = au.ts.VerifyToken(accesToken)
+	/*_, err = au.ts.VerifyToken(accesToken)
 	if err != nil {
 		return "", err
-	}
+	}*/
 
 	return accesToken, nil
 }
