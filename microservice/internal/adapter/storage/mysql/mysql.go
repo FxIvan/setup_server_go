@@ -77,7 +77,6 @@ func (m *MySQL) GetUserEmailStorage(userEmail string, collectionName string) (*d
 		}
 
 	}
-	fmt.Print(userModelMySQL)
 
 	//createdAtParse, err := time.Parse("2006-01-02 15:04:05", userModelMySQL.CreatedAt)
 	createdAtParse, err := util.ConvertTimeMySQLToTimeTime("2006-01-02 15:04:05", userModelMySQL.CreatedAt)
@@ -146,5 +145,40 @@ func (m *MySQL) ListUsersStorage(collectionName string) ([]domain.User, error) {
 }
 
 func (m *MySQL) GetUserStorage(idUser string, collectionName string) (*domain.User, error) {
-	return nil, nil
+
+	var userModelMySQL mysql_model.UserModelMySQL
+
+	getUserQuery := fmt.Sprintf("SELECT * FROM %s WHERE product_id=?", collectionName)
+	result, err := m.DB.Query(getUserQuery, idUser)
+	if err != nil {
+		return nil, fmt.Errorf("could not search user: %v", err)
+	}
+
+	for result.Next() {
+		err := result.Scan(&userModelMySQL.ID, &userModelMySQL.Email, &userModelMySQL.Name, &userModelMySQL.Password, &userModelMySQL.Role, &userModelMySQL.CreatedAt, &userModelMySQL.UpdatedAt)
+		if err != nil {
+			return nil, fmt.Errorf("could not scan user: %v", err)
+		}
+	}
+
+	createdAtParse, err := util.ConvertTimeMySQLToTimeTime("2006-01-02 15:04:05", userModelMySQL.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	updatedAtParse, err := util.ConvertTimeMySQLToTimeTime("2006-01-02 15:04:05", userModelMySQL.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+
+	modelUser := &domain.User{
+		ID:        userModelMySQL.ID,
+		Email:     userModelMySQL.Email,
+		Name:      userModelMySQL.Name,
+		Password:  userModelMySQL.Password,
+		Role:      domain.UserRole(userModelMySQL.Role),
+		CreatedAt: createdAtParse,
+		UpdatedAt: updatedAtParse,
+	}
+
+	return modelUser, nil
 }
