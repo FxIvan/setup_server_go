@@ -42,3 +42,7 @@ func (m *Redis) GetUserEmailStorage(userEmail string, collectionName string) (*d
 func (m *Redis) ListUsersStorage(collectionName string) ([]domain.User, error) {
 	return nil, nil
 }
+
+func (m *Redis) GetUserStorage(idUser string, collectionName string) (*domain.User, error) {
+	return nil, nil
+}

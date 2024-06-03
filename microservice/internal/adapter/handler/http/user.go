@@ -56,3 +56,15 @@ func (uh *UserHandler) ListUserHTTP(ctx *gin.Context) {
 
 	handleSuccess(ctx, listUser)
 }
+
+func (uh *UserHandler) GetUserHTTP(ctx *gin.Context) {
+	idUser := ctx.Param("id")
+
+	user, err := uh.svc.GetUserService(ctx, idUser)
+	if err != nil {
+		handleError(ctx, err)
+		return
+	}
+
+	handleSuccess(ctx, user)
+}

@@ -51,3 +51,12 @@ func (m *UserService) GetListUserService(ctx context.Context, skip, limit uint64
 
 	return users, nil
 }
+
+func (m *UserService) GetUserService(ctx context.Context, id string) (*domain.User, error) {
+	user, err := m.db.GetUserStorage(id, "users")
+	if err != nil {
+		return nil, domain.ErrDataNotFound
+	}
+
+	return user, nil
+}

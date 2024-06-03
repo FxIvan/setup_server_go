@@ -9,6 +9,7 @@ import (
 	mongodbModel "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -98,4 +99,27 @@ func (m *MongoDB) ListUsersStorage(collectionName string) ([]domain.User, error)
 		return nil, domain.ErrDataNotFound
 	}
 	return userList, nil
+}
+
+func (m *MongoDB) GetUserStorage(idUser string, collectionName string) (*domain.User, error) {
+
+	var userBody domain.User
+	objectId, err := primitive.ObjectIDFromHex(idUser)
+	filter := bson.M{"_id": objectId}
+	collection := m.Database.Collection(collectionName)
+	err = collection.FindOne(context.Background(), filter).Decode(&userBody)
+	if err != nil {
+		return nil, domain.ErrDataNotFound
+	}
+
+	user := &domain.User{
+		ID:        userBody.ID,
+		Name:      userBody.Name,
+		Email:     userBody.Email,
+		Role:      userBody.Role,
+		CreatedAt: userBody.CreatedAt,
+		UpdatedAt: userBody.UpdatedAt,
+	}
+
+	return user, nil
 }

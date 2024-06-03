@@ -49,7 +49,7 @@ func NewRouter(
 		authUser := user.Group("/").Use(authMiddleware(token))
 		{
 			//Listado para los usuario con token sin admin
-			//authUser.GET("/", userHandler.ListUserHTTP)
+			authUser.GET("/:id", userHandler.GetUserHTTP)
 			admin := authUser.Use(adminAuthMiddleware())
 			{
 				//Listado para usuarios admin nomas
