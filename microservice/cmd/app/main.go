@@ -36,7 +36,7 @@ func main() {
 	//server_addr := flag.String("srvAddr", "", "HTTP server network address")
 	//server_port := flag.Int("srvPort", 4000, "HTTP server network port")
 	input_engine := flag.String("enginedb", "", "Engine DB")
-	input_host := flag.String("hostdb", "localhost", "Host DB")
+	input_host := flag.String("hostdb", "localhost", "Host DB") //mongodb-container
 	input_port := flag.Int("portdb", 3360, "Port DB")
 	input_user := flag.String("userdb", "", "User DB")
 	input_password := flag.String("passwordb", "", "Password DB")
@@ -89,6 +89,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	//listenAddr := fmt.Sprintf(":%s", config.HTTP.Port)
 	listenAddr := fmt.Sprintf("%s:%s", config.HTTP.URL, config.HTTP.Port)
 	info_log.Printf("Starting server on %s", listenAddr)
 	err = router.Serve(listenAddr)
