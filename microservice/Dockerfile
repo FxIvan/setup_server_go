@@ -34,13 +34,8 @@ RUN adduser -D -u 1000 appuser
 # Establece el usuario no root
 USER appuser
 
-ENV APP_ENV=production
-ENV HTTP_URL=localhost
-ENV HTTP_PORT=4000
-ENV HTTP_ALLOWED_ORIGINS="*"
-ENV PRIVATE_KEY=0af7915144c2f2f95e9f5ea995bfd1871618e711fbf58d19b3c37a744991e55c4d9f60d821f61ccf75dbff8b91916fbab3943fc13947f5ac6cb242582e4f7e7d
-ENV PUBLIC_KEY=4d9f60d821f61ccf75dbff8b91916fbab3943fc13947f5ac6cb242582e4f7e7d
-ENV TOKEN_DURATION=24h
-
 # Define el punto de entrada
+#MongoDB
 ENTRYPOINT ["./app", "-enginedb", "mongodb","-hostdb","mongodb-container","-portdb", "27017", "-userdb", "almendra", "-passwordb", "1ASWWWaeq", "-dbname", "microservicio"]
+#MySQL
+#ENTRYPOINT ["./app", "-enginedb", "mysql" ,"-hostdb","micoservice-mysql-microservice-mysql.i.aivencloud.com","-portdb", "11808", "-userdb", "avnadmin", "-passwordb", "AVNS_dezgF0XPVi58xCFBl6b"] 
