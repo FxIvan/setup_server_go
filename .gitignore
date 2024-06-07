@@ -1,2 +1,4 @@
 ./readme.md
 .env
+/microservice-payment/ualabis/node_modules
+/microservice-payment/ualabis/package-lock.json
