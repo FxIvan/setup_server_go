@@ -36,6 +36,6 @@ USER appuser
 
 # Define el punto de entrada
 #MongoDB
-ENTRYPOINT ["./app", "-enginedb", "mongodb","-hostdb","mongodb-container","-portdb", "27017", "-userdb", "almendra", "-passwordb", "1ASWWWaeq", "-dbname", "microservicio"]
+#ENTRYPOINT ["./app", "-enginedb", "mongodb","-hostdb","mongodb-container","-portdb", "27017", "-userdb", "almendra", "-passwordb", "1ASWWWaeq", "-dbname", "microservicio"]
 #MySQL
-#ENTRYPOINT ["./app", "-enginedb", "mysql" ,"-hostdb","micoservice-mysql-microservice-mysql.i.aivencloud.com","-portdb", "11808", "-userdb", "avnadmin", "-passwordb", "AVNS_dezgF0XPVi58xCFBl6b"] 
+ENTRYPOINT ["./app", "-enginedb", "mysql" ,"-hostdb","micoservice-mysql-microservice-mysql.i.aivencloud.com","-portdb", "11808", "-userdb", "avnadmin", "-passwordb", "AVNS_dezgF0XPVi58xCFBl6b"] 
