@@ -22,6 +22,7 @@ func NewRouter(
 	token port.TokenService,
 	userHandler UserHandler,
 	authHandler AuthHandler,
+	giftCardHandler GiftCardHandler,
 ) (*Router, error) {
 	if config.Env == "production" {
 		gin.SetMode(gin.ReleaseMode)
@@ -55,6 +56,13 @@ func NewRouter(
 				//Listado para usuarios admin nomas
 				admin.GET("/", userHandler.ListUserHTTP)
 			}
+		}
+
+		giftcard := v1.Group("/giftcard")
+
+		authGiftCard := giftcard.Group("/").Use(authMiddleware(token))
+		{
+			authGiftCard.POST("/create", giftCardHandler.CreateGiftCardHTTP)
 		}
 	}
 

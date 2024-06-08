@@ -7,6 +7,7 @@ import (
 
 	"github.com/fxivan/set_up_server/microservice/configuration"
 	mongodbModel "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
+	mongodb_model "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -88,7 +89,7 @@ func (m *MongoDB) GetUserEmailStorage(userEmail string, collectionName string) (
 }
 
 func (m *MongoDB) ListUsersStorage(collectionName string) ([]domain.User, error) {
-	var userList []domain.User
+	var userList []mongodb_model.UserModelMongoDB
 	collection := m.Database.Collection(collectionName)
 
 	cur, err := collection.Find(context.TODO(), bson.D{})
@@ -98,7 +99,24 @@ func (m *MongoDB) ListUsersStorage(collectionName string) ([]domain.User, error)
 	if err = cur.All(context.Background(), &userList); err != nil {
 		return nil, domain.ErrDataNotFound
 	}
-	return userList, nil
+
+	var listUserAll []domain.User
+
+	for _, user := range userList {
+		listUserAll = append(listUserAll, domain.User{
+			ID:        user.ID.Hex(),
+			Name:      user.Name,
+			Email:     user.Email,
+			Password:  "",
+			Role:      domain.UserRole(user.Role),
+			CreatedAt: user.CreatedAt,
+			UpdatedAt: user.UpdatedAt,
+		})
+
+	}
+
+	return listUserAll, nil
+
 }
 
 func (m *MongoDB) GetUserStorage(idUser string, collectionName string) (*domain.User, error) {

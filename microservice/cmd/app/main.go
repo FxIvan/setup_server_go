@@ -77,11 +77,15 @@ func main() {
 	authService := service.NewAuthService(repo, token, config.TerminalLog)
 	authHandler := http.NewAuthHandler(authService)
 
+	//GiftCard
+	giftCardService := service.NewGiftCardService(repo, config.TerminalLog)
+	giftCardHandler := http.NewGiftCardHandler(giftCardService)
 	router, err := http.NewRouter(
 		config.HTTP,
 		token,
 		*userHandler,
 		*authHandler,
+		*giftCardHandler,
 	)
 
 	if err != nil {
