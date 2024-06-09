@@ -5,11 +5,19 @@ import (
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/request"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/fxivan/set_up_server/microservice/internal/core/port"
+	"github.com/fxivan/set_up_server/microservice/internal/core/util"
 )
 
 type GiftCardService struct {
 	repo port.UserService
 	log  *config.TerminalLog
+}
+
+type BodyPaymentMicroservice struct {
+	Amount         int    `json:"amount"`
+	Description    string `json:"description"`
+	SuccesResponse string `json:"succesResponse"`
+	FailedResponse string `json:"failedResponse"`
 }
 
 func NewGiftCardService(repo port.UserService, logTerminal *config.TerminalLog) *GiftCardService {
@@ -19,7 +27,7 @@ func NewGiftCardService(repo port.UserService, logTerminal *config.TerminalLog) 
 	}
 }
 
-func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequest, infoToken *domain.TokenPayload) (*domain.Coupon, error) {
+func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequest, infoToken *domain.TokenPayload) (*util.ResponsePOST, error) { //(*domain.Coupon, error)
 
 	total := body.AmountCoupons * body.PriceCoupons
 
@@ -32,5 +40,17 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 		Total:         total,
 	}
 
-	return coupon, nil
+	bodyPost := &BodyPaymentMicroservice{
+		Amount:         coupon.Total,
+		Description:    coupon.Description,
+		SuccesResponse: "https://www.google.com/search?q=failed",
+		FailedResponse: "https://www.google.com/search?q=success",
+	}
+
+	data, err := util.POSTMicroservice("http://localhost:3000/api/create/payment", "application/json ", bodyPost)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }
