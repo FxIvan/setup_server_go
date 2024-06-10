@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 type ResponsePOST struct {
@@ -22,12 +23,17 @@ func POSTMicroservice(URL string, format string, bodyPost any) (*ResponsePOST, e
 		return nil, err
 	}
 
+	start := time.Now() // Start time
+
 	resp, err := http.Post(URL, format, bytes.NewBuffer(jsonData))
 	if err != nil {
 		return nil, err
 	}
 
 	defer resp.Body.Close()
+
+	duration := time.Since(start) // Calculate duration
+	fmt.Printf("POST request took %s\n", duration)
 
 	// Leer el cuerpo de la respuesta
 	bodyResp, err := ioutil.ReadAll(resp.Body)
@@ -44,13 +50,6 @@ func POSTMicroservice(URL string, format string, bodyPost any) (*ResponsePOST, e
 		return nil, fmt.Errorf("Error parsing request body: %s", err)
 	}
 
-	// Procesar la respuesta (si es necesario)
-	response := &ResponsePOST{
-		Status:  responsePOST.Status,
-		Message: responsePOST.Message,
-		Data:    responsePOST.Data,
-	}
-
-	return response, nil
+	return &responsePOST, nil
 
 }

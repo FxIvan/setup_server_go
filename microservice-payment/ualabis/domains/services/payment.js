@@ -1,16 +1,23 @@
 const UalaApiCheckout = require('ualabis-nodejs');
 require('dotenv').config();
 
+const setUpUala = async () => {
+    await UalaApiCheckout.setUp({
+        userName: process.env.USER_NAME_UALA,
+        clientId: process.env.CLIENT_ID_UALA,
+        clientSecret: process.env.CLIENT_SECRET_ID,
+        isDev: true
+    });
+};
+
+setUpUala().catch(err => {
+    console.error("Error setting up Uala API:", err);
+    process.exit(1);
+});
+
 const CreatePayment = async (req,res) => {
     try{
         const {amount , description , succesResponse, failedResponse} = req.body;
-
-        await UalaApiCheckout.setUp({
-            userName: process.env.USER_NAME_UALA,
-            clientId: process.env.CLIENT_ID_UALA,
-            clientSecret: process.env.CLIENT_SECRET_ID,
-            isDev: true
-        });
 
         const order = await UalaApiCheckout.createOrder({
             amount: amount,
