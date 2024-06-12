@@ -7,8 +7,8 @@ import (
 
 	"github.com/fxivan/set_up_server/microservice/configuration"
 	mongodbModel "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
-	mongodb_model "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
+	"github.com/fxivan/set_up_server/microservice/internal/core/util"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -89,7 +89,7 @@ func (m *MongoDB) GetUserEmailStorage(userEmail string, collectionName string) (
 }
 
 func (m *MongoDB) ListUsersStorage(collectionName string) ([]domain.User, error) {
-	var userList []mongodb_model.UserModelMongoDB
+	var userList []mongodbModel.UserModelMongoDB
 	collection := m.Database.Collection(collectionName)
 
 	cur, err := collection.Find(context.TODO(), bson.D{})
@@ -140,4 +140,43 @@ func (m *MongoDB) GetUserStorage(idUser string, collectionName string) (*domain.
 	}
 
 	return user, nil
+}
+
+func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string) (*[]mongodbModel.CodeCoupon, error) {
+	var codeCoupon []mongodbModel.CodeCoupon
+	collection := m.Database.Collection(collectionName)
+
+	cur, err := collection.Find(context.TODO(), bson.D{})
+	if err != nil {
+		return nil, domain.ErrDataNotFound
+	}
+	if err = cur.All(context.Background(), &codeCoupon); err != nil {
+		return nil, domain.ErrDataNotFound
+	}
+
+	var listCode []string
+
+	listCode = util.RandSeq(8, amount)
+
+	for i := 0; i < len(listCode); i++ {
+		exist, _ := util.SearchCode(listCode[i], codeCoupon)
+		if exist {
+			retryCode := util.RandSeq(8, 1)
+			listCode = append(listCode, retryCode[0])
+			i--
+			continue
+		}
+
+		codeOne := &mongodbModel.CodeCoupon{
+			ID:   primitive.NewObjectID(),
+			Code: listCode[i],
+		}
+		_, err = collection.InsertOne(context.Background(), codeOne)
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+	}
+
+	return &codeCoupon, nil
 }

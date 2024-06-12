@@ -10,12 +10,12 @@ import (
 )
 
 type AuthService struct {
-	repo port.UserService
+	repo port.RepoService
 	ts   port.TokenService
 	log  *config.TerminalLog
 }
 
-func NewAuthService(repo port.UserService, ts port.TokenService, logTerminal *config.TerminalLog) *AuthService {
+func NewAuthService(repo port.RepoService, ts port.TokenService, logTerminal *config.TerminalLog) *AuthService {
 	return &AuthService{
 		repo: repo,
 		ts:   ts,

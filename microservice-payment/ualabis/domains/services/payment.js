@@ -22,8 +22,8 @@ const CreatePayment = async (req,res) => {
         const order = await UalaApiCheckout.createOrder({
             amount: amount,
             description: description,
-            callbackSuccess: 'https://www.google.com/search?q=failed',
-            callbackFail: 'https://www.google.com/search?q=success',
+            callbackSuccess: `${succesResponse}`,
+            callbackFail: `${failedResponse}`,
         });
         //const generatedOrder = await UalaApiCheckout.getOrder(order.uuid);
 

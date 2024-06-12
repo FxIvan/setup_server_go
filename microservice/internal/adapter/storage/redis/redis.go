@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/fxivan/set_up_server/microservice/configuration"
+	mongodb_model "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/redis/go-redis/v9"
 )
@@ -44,5 +45,9 @@ func (m *Redis) ListUsersStorage(collectionName string) ([]domain.User, error) {
 }
 
 func (m *Redis) GetUserStorage(idUser string, collectionName string) (*domain.User, error) {
+	return nil, nil
+}
+
+func (m *Redis) CreateNumberGiftCardStorage(amount int, collectionName string) (*[]mongodb_model.CodeCoupon, error) {
 	return nil, nil
 }

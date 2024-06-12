@@ -11,8 +11,8 @@ import (
 	"github.com/fxivan/set_up_server/microservice/internal/core/port"
 )
 
-func New(config *configuration.Configuration) (port.UserService, error) {
-	var repo port.UserService
+func New(config *configuration.Configuration) (port.RepoService, error) {
+	var repo port.RepoService
 	var err error
 
 	switch config.Engine {

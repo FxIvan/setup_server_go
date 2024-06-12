@@ -7,6 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/fxivan/set_up_server/microservice/configuration"
+	mongodb_model "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
 	mysql_model "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mysql/model"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/fxivan/set_up_server/microservice/internal/core/util"
@@ -181,4 +182,8 @@ func (m *MySQL) GetUserStorage(idUser string, collectionName string) (*domain.Us
 	}
 
 	return modelUser, nil
+}
+
+func (m *MySQL) CreateNumberGiftCardStorage(amount int, collectionName string) (*[]mongodb_model.CodeCoupon, error) {
+	return nil, nil
 }
