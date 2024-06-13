@@ -7,7 +7,7 @@ import (
 )
 
 type BeneficiaryUserInfo struct {
-	ID     primitive.ObjectID `bson:"_id"`
+	ID     primitive.ObjectID `bson:"userBeneficiaryID"`
 	Name   string
 	Code   int
 	Mobile int
@@ -31,7 +31,7 @@ type CouponMetaData struct {
 	Code            string
 	ExpireAt        time.Time
 	BeneficiaryUser BeneficiaryUserInfo
-	isUsed          bool
+	IsUsed          bool
 	Price           int
 	CVU             string
 	Alias           string
@@ -41,17 +41,15 @@ type CouponMetaData struct {
 }
 
 type CouponModel struct {
-	ID            primitive.ObjectID `bson:"_id"`
-	Owner         primitive.ObjectID `bson:"idOwner"`
-	Title         string             `bson:"title"`
-	Description   string             `bson:"description"`
-	AmountCoupons string             `bson:"amountCoupons"`
-	PriceCoupon   string             `bson:"priceCoupon"`
-	Total         string             `bson:"total"`
-	Codes         CouponMetaData
+	Owner         string `bson:"idOwner"`
+	Title         string `bson:"title"`
+	Description   string `bson:"description"`
+	AmountCoupons string `bson:"amountCoupons"`
+	PriceCoupon   string `bson:"priceCoupon"`
+	Total         string `bson:"total"`
+	Codes         []CouponMetaData
 }
 
 type CodeCoupon struct {
-	ID   primitive.ObjectID `bson:"_id"`
 	Code string
 }

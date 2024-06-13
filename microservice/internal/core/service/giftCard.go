@@ -1,8 +1,6 @@
 package service
 
 import (
-	"fmt"
-
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/request"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
@@ -37,7 +35,7 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 		Owner:         infoToken.UserID,
 		Title:         body.Title,
 		Description:   body.Description,
-		AmountCoupons: body.AmountCoupons,
+		AmountCoupons: body.AmountCoupons - 1,
 		PriceCoupon:   body.PriceCoupons,
 		Total:         total,
 	}
@@ -59,7 +57,10 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 		return nil, err
 	}
 
-	fmt.Println(allCode)
+	_, err = gc.repo.LinkingGiftCardUserStorage("couponsalluser", allCode, data, coupon)
+	if err != nil {
+		return nil, err
+	}
 
-	return data, nil
+	return nil, nil
 }

@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/fxivan/set_up_server/microservice/configuration"
-	mongodb_model "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/redis/go-redis/v9"
 )
@@ -48,6 +47,10 @@ func (m *Redis) GetUserStorage(idUser string, collectionName string) (*domain.Us
 	return nil, nil
 }
 
-func (m *Redis) CreateNumberGiftCardStorage(amount int, collectionName string) (*[]mongodb_model.CodeCoupon, error) {
+func (m *Redis) CreateNumberGiftCardStorage(amount int, collectionName string) ([]string, error) {
 	return nil, nil
+}
+
+func (m *Redis) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment any, infoDomainCoupon *domain.Coupon) (string, error) {
+	return "", nil
 }

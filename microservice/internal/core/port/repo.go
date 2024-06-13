@@ -1,7 +1,6 @@
 package port
 
 import (
-	mongodbModel "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 )
 
@@ -12,5 +11,6 @@ type RepoService interface {
 	ListUsersStorage(collectionName string) ([]domain.User, error)
 	GetUserStorage(idUser string, collectionName string) (*domain.User, error)
 	//GiftCard
-	CreateNumberGiftCardStorage(amount int, collectionName string) (*[]mongodbModel.CodeCoupon, error)
+	CreateNumberGiftCardStorage(amount int, collectionName string) ([]string, error)
+	LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment any, infoDomainCoupon *domain.Coupon) (string, error)
 }

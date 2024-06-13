@@ -3,10 +3,12 @@ package mongodb
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/fxivan/set_up_server/microservice/configuration"
 	mongodbModel "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
+	mongodb_model "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/fxivan/set_up_server/microservice/internal/core/util"
 	"go.mongodb.org/mongo-driver/bson"
@@ -142,7 +144,7 @@ func (m *MongoDB) GetUserStorage(idUser string, collectionName string) (*domain.
 	return user, nil
 }
 
-func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string) (*[]mongodbModel.CodeCoupon, error) {
+func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string) ([]string, error) {
 	var codeCoupon []mongodbModel.CodeCoupon
 	collection := m.Database.Collection(collectionName)
 
@@ -168,9 +170,9 @@ func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string)
 		}
 
 		codeOne := &mongodbModel.CodeCoupon{
-			ID:   primitive.NewObjectID(),
 			Code: listCode[i],
 		}
+
 		_, err = collection.InsertOne(context.Background(), codeOne)
 		if err != nil {
 			fmt.Println(err)
@@ -178,5 +180,46 @@ func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string)
 		}
 	}
 
-	return &codeCoupon, nil
+	return listCode, nil
+}
+
+func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment any, infoDomainCoupon *domain.Coupon) (string, error) {
+
+	collection := m.Database.Collection(collectionName)
+
+	var couponMetaData []mongodb_model.CouponMetaData
+
+	for j := 0; j < len(coupons); j++ {
+		couponMetaData = append(couponMetaData, mongodb_model.CouponMetaData{
+			Code:     coupons[j],
+			ExpireAt: time.Now().AddDate(0, 0, 30),
+			IsUsed:   false,
+			Price:    infoDomainCoupon.PriceCoupon,
+			LinkPayment: mongodb_model.LinkPaymentInfo{
+				Link:        "",
+				SuccessLink: "",
+				FailedLink:  "",
+			},
+		})
+	}
+
+	fmt.Print("Cantidad de couponMetaData", len(couponMetaData))
+
+	modelCoupon := &mongodb_model.CouponModel{
+		Owner:         infoDomainCoupon.Owner,
+		Title:         infoDomainCoupon.Title,
+		Description:   infoDomainCoupon.Description,
+		AmountCoupons: strconv.Itoa(infoDomainCoupon.AmountCoupons),
+		PriceCoupon:   strconv.Itoa(infoDomainCoupon.PriceCoupon),
+		Total:         strconv.Itoa(infoDomainCoupon.Total),
+		Codes:         couponMetaData,
+	}
+
+	_, err := collection.InsertOne(context.Background(), modelCoupon)
+	if err != nil {
+		fmt.Print("Erro ---->", err)
+		return "", err
+	}
+
+	return "Gift Card Created", nil
 }
