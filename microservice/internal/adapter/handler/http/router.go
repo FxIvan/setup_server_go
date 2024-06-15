@@ -23,6 +23,7 @@ func NewRouter(
 	userHandler UserHandler,
 	authHandler AuthHandler,
 	giftCardHandler GiftCardHandler,
+	verifyPaymentHandler VerifyPaymentHandler,
 ) (*Router, error) {
 	if config.Env == "production" {
 		gin.SetMode(gin.ReleaseMode)
@@ -63,6 +64,11 @@ func NewRouter(
 		authGiftCard := giftcard.Group("/").Use(authMiddleware(token))
 		{
 			authGiftCard.POST("/create", giftCardHandler.CreateGiftCardHTTP)
+		}
+
+		verify := v1.Group("/verify")
+		{
+			verify.GET("/payment/uala", verifyPaymentHandler.VerifyPaymentHTTP)
 		}
 	}
 

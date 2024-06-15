@@ -47,7 +47,27 @@ const GetPayment = async (req,res) => {
     try{}catch(err){}
 }
 
+const VerifyUala = async (req,res) => {
+    try{
+        const {id} = req.params;
+        const order = await UalaApiCheckout.getOrder(id);
+        console.log("--------------- VerifyUala ---------------\n")
+        console.log(order);
+        console.log("--------------- VerifyUala ---------------")
+        res.status(200).send({
+             order
+        });
+    }catch(err){
+        res.status(500).send({
+            status:500,
+            message: "Internal server error",
+            error: err
+        });
+    }
+}   
+
 module.exports = {
     CreatePayment,
-    GetPayment
+    GetPayment,
+    VerifyUala
 }

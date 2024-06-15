@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/request"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
@@ -32,6 +34,7 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 	total := body.AmountCoupons * body.PriceCoupons
 
 	coupon := &domain.Coupon{
+		IDReference:   util.GenerateUUIDUnique(),
 		Owner:         infoToken.UserID,
 		Title:         body.Title,
 		Description:   body.Description,
@@ -43,11 +46,11 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 	bodyPost := &BodyPaymentMicroservice{
 		Amount:         coupon.Total,
 		Description:    coupon.Description,
-		SuccesResponse: "https://www.utl-test.com/search?q=failed",
-		FailedResponse: "https://www.utl-testutl-test.com/search?q=success",
+		SuccesResponse: fmt.Sprintf("https://api.tech/v1/verify/payment/uala?uuid=%s&status=success", coupon.IDReference),
+		FailedResponse: fmt.Sprintf("https://api.tech/v1/verify/payment/uala?uuid=%s&status=failed", coupon.IDReference),
 	}
 
-	data, err := util.POSTMicroservice("http://localhost:3000/api/create/payment", "application/json ", bodyPost)
+	data, err := util.POSTCreateGiftCardMicroservice("http://localhost:3000/api/create/payment", "application/json ", bodyPost)
 	if err != nil {
 		gc.log.ErrorLog.Println(err)
 		return nil, err
@@ -60,6 +63,7 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 	}
 
 	bodyInfoPayment := &domain.ResponseUalabisPOST{
+		IDReference: coupon.IDReference,
 		IdTx:        data.Data.IdTx,
 		Type:        data.Data.Type,
 		UUID:        data.Data.UUID,

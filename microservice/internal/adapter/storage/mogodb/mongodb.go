@@ -209,13 +209,14 @@ func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []st
 	}
 
 	modelCoupon := &mongodb_model.CouponModel{
-		Owner:         infoDomainCoupon.Owner,
-		Title:         infoDomainCoupon.Title,
-		Description:   infoDomainCoupon.Description,
-		AmountCoupons: strconv.Itoa(infoDomainCoupon.AmountCoupons),
-		PriceCoupon:   strconv.Itoa(infoDomainCoupon.PriceCoupon),
-		Total:         strconv.Itoa(infoDomainCoupon.Total),
-		Codes:         couponMetaData,
+		IDReferentProcess: infoDomainCoupon.IDReference,
+		Owner:             infoDomainCoupon.Owner,
+		Title:             infoDomainCoupon.Title,
+		Description:       infoDomainCoupon.Description,
+		AmountCoupons:     strconv.Itoa(infoDomainCoupon.AmountCoupons),
+		PriceCoupon:       strconv.Itoa(infoDomainCoupon.PriceCoupon),
+		Total:             strconv.Itoa(infoDomainCoupon.Total),
+		Codes:             couponMetaData,
 		InfoPayment: mongodb_model.LinkPaymentInfo{
 			OrderNumber: infoPayment.OrderNumber,
 			Amount:      infoPayment.Amount,

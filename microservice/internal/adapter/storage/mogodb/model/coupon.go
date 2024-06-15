@@ -40,14 +40,15 @@ type CouponMetaData struct {
 }
 
 type CouponModel struct {
-	Owner         string `bson:"idOwner"`
-	Title         string `bson:"title"`
-	Description   string `bson:"description"`
-	AmountCoupons string `bson:"amountCoupons"`
-	PriceCoupon   string `bson:"priceCoupon"`
-	Total         string `bson:"total"`
-	Codes         []CouponMetaData
-	InfoPayment   LinkPaymentInfo
+	IDReferentProcess string `bson:"idDReferentProcess"`
+	Owner             string `bson:"idOwner"`
+	Title             string `bson:"title"`
+	Description       string `bson:"description"`
+	AmountCoupons     string `bson:"amountCoupons"`
+	PriceCoupon       string `bson:"priceCoupon"`
+	Total             string `bson:"total"`
+	Codes             []CouponMetaData
+	InfoPayment       LinkPaymentInfo
 }
 
 type CodeCoupon struct {

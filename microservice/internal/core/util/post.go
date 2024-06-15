@@ -17,8 +17,7 @@ type ResponsePOST struct {
 	Data    domain.ResponseUalabisPOST `json:"data"`
 }
 
-func POSTMicroservice(URL string, format string, bodyPost any) (*ResponsePOST, error) {
-
+func POSTCreateGiftCardMicroservice(URL string, format string, bodyPost any) (*ResponsePOST, error) {
 	var responsePOST ResponsePOST
 	jsonData, err := json.Marshal(bodyPost)
 	if err != nil {
@@ -71,4 +70,29 @@ func POSTMicroservice(URL string, format string, bodyPost any) (*ResponsePOST, e
 
 	return &responsePOST, nil
 
+}
+
+func GETVerifyPaymentUala(URL string) (*domain.ResponseUalabisPOSTVerify, error) {
+	var resPOST domain.ResponseUalabisPOSTVerify
+
+	resp, err := http.Get(URL)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+	bodyResp, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error al leer el cuerpo de la respuesta: %v", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("error en la respuesta del servidor: %s - %s", resp.Status, bodyResp)
+	}
+
+	if err := json.Unmarshal(bodyResp, &resPOST); err != nil {
+		return nil, fmt.Errorf("Error parsing request body: %s", err)
+	}
+
+	return &resPOST, nil
 }
