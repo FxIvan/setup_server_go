@@ -58,7 +58,7 @@ func main() {
 		DBName:   *input_dbname,
 	}
 
-	repo, err := dbRepository.New(&configDB)
+	repo, err := dbRepository.New(&configDB, config.TerminalLog)
 	if err != nil {
 		panic(err)
 	}
@@ -70,7 +70,7 @@ func main() {
 	}
 
 	//User
-	userService := service.NewUserService(repo)
+	userService := service.NewUserService(repo, config.TerminalLog)
 	userHandler := http.NewUserHandler(userService)
 
 	//Auth
@@ -80,6 +80,7 @@ func main() {
 	//GiftCard
 	giftCardService := service.NewGiftCardService(repo, config.TerminalLog)
 	giftCardHandler := http.NewGiftCardHandler(giftCardService)
+
 	router, err := http.NewRouter(
 		config.HTTP,
 		token,

@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/request"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/fxivan/set_up_server/microservice/internal/core/port"
@@ -11,17 +12,22 @@ import (
 )
 
 type UserService struct {
-	db port.RepoService
+	db  port.RepoService
+	log *config.TerminalLog
 }
 
-func NewUserService(db port.RepoService) *UserService {
-	return &UserService{db: db}
+func NewUserService(db port.RepoService, logTerminal *config.TerminalLog) *UserService {
+	return &UserService{
+		db:  db,
+		log: logTerminal,
+	}
 }
 
 func (m *UserService) CreateUserService(userModel *request.RegisterUserRequest) (string, error) {
 
 	hashedPassword, err := util.HashPassword(userModel.Password)
 	if err != nil {
+		m.log.ErrorLog.Println(err)
 		return "", err
 	}
 
@@ -35,6 +41,7 @@ func (m *UserService) CreateUserService(userModel *request.RegisterUserRequest) 
 	}
 	salida, err := m.db.CreateUserStorage(modelUser, "users")
 	if err != nil {
+		m.log.ErrorLog.Println(err)
 		return "", err
 	}
 
@@ -46,6 +53,7 @@ func (m *UserService) GetListUserService(ctx context.Context, skip, limit uint64
 
 	users, err := m.db.ListUsersStorage("users")
 	if err != nil {
+		m.log.ErrorLog.Println(err)
 		return nil, domain.ErrDataNotFound
 	}
 
@@ -55,6 +63,7 @@ func (m *UserService) GetListUserService(ctx context.Context, skip, limit uint64
 func (m *UserService) GetUserService(ctx context.Context, id string) (*domain.User, error) {
 	user, err := m.db.GetUserStorage(id, "users")
 	if err != nil {
+		m.log.ErrorLog.Println(err)
 		return nil, domain.ErrDataNotFound
 	}
 

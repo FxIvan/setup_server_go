@@ -27,7 +27,7 @@ func NewGiftCardService(repo port.RepoService, logTerminal *config.TerminalLog) 
 	}
 }
 
-func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequest, infoToken *domain.TokenPayload) (*util.ResponsePOST, error) { //(*domain.Coupon, error)
+func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequest, infoToken *domain.TokenPayload) (*util.ResponsePOST, error) {
 
 	total := body.AmountCoupons * body.PriceCoupons
 
@@ -49,11 +49,13 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 
 	data, err := util.POSTMicroservice("http://localhost:3000/api/create/payment", "application/json ", bodyPost)
 	if err != nil {
+		gc.log.ErrorLog.Println(err)
 		return nil, err
 	}
 
 	allCode, err := gc.repo.CreateNumberGiftCardStorage(coupon.AmountCoupons, "coupons")
 	if err != nil {
+		gc.log.ErrorLog.Println(err)
 		return nil, err
 	}
 
@@ -73,6 +75,7 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 
 	_, err = gc.repo.LinkingGiftCardUserStorage("couponsalluser", allCode, bodyInfoPayment, coupon)
 	if err != nil {
+		gc.log.ErrorLog.Println(err)
 		return nil, err
 	}
 

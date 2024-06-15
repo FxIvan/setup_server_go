@@ -5,15 +5,17 @@ import (
 	"fmt"
 
 	"github.com/fxivan/set_up_server/microservice/configuration"
+	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/redis/go-redis/v9"
 )
 
 type Redis struct {
 	connRedis *redis.Client
+	log       *config.TerminalLog
 }
 
-func New(config *configuration.Configuration) (*Redis, error) {
+func New(config *configuration.Configuration, logTerminal *config.TerminalLog) (*Redis, error) {
 	ctx := context.Background()
 	strConn := fmt.Sprintf("%s:%d", config.Host, config.Port)
 	redisClient := redis.NewClient(&redis.Options{
@@ -28,6 +30,7 @@ func New(config *configuration.Configuration) (*Redis, error) {
 
 	return &Redis{
 		connRedis: redisClient,
+		log:       logTerminal,
 	}, nil
 }
 

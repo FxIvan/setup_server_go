@@ -1,8 +1,6 @@
 package http
 
 import (
-	"fmt"
-
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/request"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/fxivan/set_up_server/microservice/internal/core/service"
@@ -27,7 +25,6 @@ func (gc *GiftCardHandler) CreateGiftCardHTTP(ctx *gin.Context) {
 	}
 	payload := getAuthPayload(ctx, authorizationPayloadKey)
 
-	fmt.Print(payload)
 	output, err := gc.svc.CreateGiftCardService(req, payload)
 
 	if err != nil {

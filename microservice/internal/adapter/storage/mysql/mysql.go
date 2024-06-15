@@ -7,16 +7,18 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/fxivan/set_up_server/microservice/configuration"
+	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
 	mysql_model "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mysql/model"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/fxivan/set_up_server/microservice/internal/core/util"
 )
 
 type MySQL struct {
-	DB *sql.DB
+	DB  *sql.DB
+	log *config.TerminalLog
 }
 
-func New(config *configuration.Configuration) (*MySQL, error) {
+func New(config *configuration.Configuration, logTerminal *config.TerminalLog) (*MySQL, error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", config.User, config.Password, config.Host, config.Port, "users")
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
@@ -27,7 +29,10 @@ func New(config *configuration.Configuration) (*MySQL, error) {
 		return nil, fmt.Errorf("could not ping mysql: %w", err)
 	}
 
-	return &MySQL{DB: db}, nil
+	return &MySQL{
+		DB:  db,
+		log: logTerminal,
+	}, nil
 }
 
 func (m *MySQL) CreateUserStorage(userModel *domain.User, collectionName string) (string, error) {
@@ -45,6 +50,7 @@ func (m *MySQL) CreateUserStorage(userModel *domain.User, collectionName string)
 	`
 	_, err := m.DB.Exec(createTableQuery)
 	if err != nil {
+		m.log.ErrorLog.Println(err)
 		return "", fmt.Errorf("could not create table: %v", err)
 	}
 	// Insertar datos del usuario en la tabla
@@ -53,6 +59,7 @@ func (m *MySQL) CreateUserStorage(userModel *domain.User, collectionName string)
 	`
 	_, err = m.DB.Exec(insertUserQuery, userModel.Email, userModel.Name, userModel.Password, userModel.Role)
 	if err != nil {
+		m.log.ErrorLog.Println(err)
 		return "", fmt.Errorf("could not insert user: %v", err)
 	}
 
@@ -67,12 +74,14 @@ func (m *MySQL) GetUserEmailStorage(userEmail string, collectionName string) (*d
 	getUserQuery := `SELECT * FROM users WHERE email=?`
 	result, err := m.DB.Query(getUserQuery, userEmail)
 	if err != nil {
+		m.log.ErrorLog.Println(err)
 		return nil, fmt.Errorf("could not create table: %v", err)
 	}
 
 	for result.Next() {
 		err := result.Scan(&userModelMySQL.ID, &userModelMySQL.Email, &userModelMySQL.Name, &userModelMySQL.Password, &userModelMySQL.Role, &userModelMySQL.CreatedAt, &userModelMySQL.UpdatedAt)
 		if err != nil {
+			m.log.ErrorLog.Println(err)
 			return nil, fmt.Errorf("could not scan user: %v", err)
 		}
 
@@ -81,10 +90,12 @@ func (m *MySQL) GetUserEmailStorage(userEmail string, collectionName string) (*d
 	//createdAtParse, err := time.Parse("2006-01-02 15:04:05", userModelMySQL.CreatedAt)
 	createdAtParse, err := util.ConvertTimeMySQLToTimeTime("2006-01-02 15:04:05", userModelMySQL.CreatedAt)
 	if err != nil {
+		m.log.ErrorLog.Println(err)
 		return nil, err
 	}
 	updatedAtParse, err := util.ConvertTimeMySQLToTimeTime("2006-01-02 15:04:05", userModelMySQL.UpdatedAt)
 	if err != nil {
+		m.log.ErrorLog.Println(err)
 		return nil, err
 	}
 
@@ -107,6 +118,7 @@ func (m *MySQL) ListUsersStorage(collectionName string) ([]domain.User, error) {
 	getUserQuery := `SELECT * FROM users`
 	result, err := m.DB.Query(getUserQuery)
 	if err != nil {
+		m.log.ErrorLog.Println(err)
 		return nil, fmt.Errorf("could not create table: %v", err)
 	}
 
@@ -117,15 +129,18 @@ func (m *MySQL) ListUsersStorage(collectionName string) ([]domain.User, error) {
 		newUsersModel := new(mysql_model.UserModelMySQL)
 		err := result.Scan(&newUsersModel.ID, &newUsersModel.Email, &newUsersModel.Name, &newUsersModel.Password, &newUsersModel.Role, &newUsersModel.CreatedAt, &newUsersModel.UpdatedAt)
 		if err != nil {
+			m.log.ErrorLog.Println(err)
 			return nil, fmt.Errorf("could not scan user: %v", err)
 		}
 
 		createdAtParse, err := util.ConvertTimeMySQLToTimeTime("2006-01-02 15:04:05", newUsersModel.CreatedAt)
 		if err != nil {
+			m.log.ErrorLog.Println(err)
 			return nil, err
 		}
 		updatedAtParse, err := util.ConvertTimeMySQLToTimeTime("2006-01-02 15:04:05", newUsersModel.UpdatedAt)
 		if err != nil {
+			m.log.ErrorLog.Println(err)
 			return nil, err
 		}
 
@@ -151,22 +166,26 @@ func (m *MySQL) GetUserStorage(idUser string, collectionName string) (*domain.Us
 	getUserQuery := fmt.Sprintf("SELECT * FROM %s WHERE product_id=?", collectionName)
 	result, err := m.DB.Query(getUserQuery, idUser)
 	if err != nil {
+		m.log.ErrorLog.Println(err)
 		return nil, fmt.Errorf("could not search user: %v", err)
 	}
 
 	for result.Next() {
 		err := result.Scan(&userModelMySQL.ID, &userModelMySQL.Email, &userModelMySQL.Name, &userModelMySQL.Password, &userModelMySQL.Role, &userModelMySQL.CreatedAt, &userModelMySQL.UpdatedAt)
 		if err != nil {
+			m.log.ErrorLog.Println(err)
 			return nil, fmt.Errorf("could not scan user: %v", err)
 		}
 	}
 
 	createdAtParse, err := util.ConvertTimeMySQLToTimeTime("2006-01-02 15:04:05", userModelMySQL.CreatedAt)
 	if err != nil {
+		m.log.ErrorLog.Println(err)
 		return nil, err
 	}
 	updatedAtParse, err := util.ConvertTimeMySQLToTimeTime("2006-01-02 15:04:05", userModelMySQL.UpdatedAt)
 	if err != nil {
+		m.log.ErrorLog.Println(err)
 		return nil, err
 	}
 
