@@ -51,6 +51,6 @@ func (m *Redis) CreateNumberGiftCardStorage(amount int, collectionName string) (
 	return nil, nil
 }
 
-func (m *Redis) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment any, infoDomainCoupon *domain.Coupon) (string, error) {
+func (m *Redis) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (string, error) {
 	return "", nil
 }

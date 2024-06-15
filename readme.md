@@ -29,3 +29,50 @@
 
 `Es necesario crerar la DB en Workbench`
 >CREATE DATABASE users;
+
+### Ejemplo de como se guarda el BODY 
+> localhost:4000/v1/giftcard/create
+```
+[
+  {
+    _id: ObjectId('666cd93a2f6d17734f7dae22'),
+    idOwner: '666495d87266690cbddd165c',
+    title: 'cel',
+    description: 'Esto es una descripcion',
+    amountCoupons: '0',
+    priceCoupon: '100',
+    total: '100',
+    codes: [
+      {
+        code: 'Eu9aqPBJ',
+        expireat: ISODate('2024-07-14T23:58:50.961Z'),
+        beneficiaryuser: {
+          userBeneficiaryID: ObjectId('000000000000000000000000'),
+          name: '',
+          code: 0,
+          mobile: 0,
+          email: ''
+        },
+        isused: false,
+        price: 100,
+        cvu: '',
+        alias: '',
+        wallet: '',
+        red: ''
+      }
+    ],
+    infopayment: {
+      link: 'https://uala-checkout.preprod.geopagos.com/orders/6ff3ce7c-1bdf-4256-8e11-9f767d5452ab',
+      successlink: 'https://www.utl-test.com/search?q=failed',
+      failedlink: '',
+      ordernumber: '0004216-0000230144',
+      amount: '100',
+      refnumber: 'b6ab3e6f-686f-4f03-873b-11f90cbb6daa',
+      status: 'PENDING',
+      type: 'Order',
+      idtx: '/api/v2/orders/6ff3ce7c-1bdf-4256-8e11-9f767d5452ab',
+      uuid: '6ff3ce7c-1bdf-4256-8e11-9f767d5452ab'
+    }
+  }
+]
+```

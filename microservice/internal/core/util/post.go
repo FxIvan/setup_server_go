@@ -7,12 +7,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 )
 
 type ResponsePOST struct {
-	Status  int    `json:"status"`
-	Message string `json:"message"`
-	Data    any    `json:"data"`
+	Status  int                        `json:"status"`
+	Message string                     `json:"message"`
+	Data    domain.ResponseUalabisPOST `json:"data"`
 }
 
 func POSTMicroservice(URL string, format string, bodyPost any) (*ResponsePOST, error) {
@@ -49,6 +51,23 @@ func POSTMicroservice(URL string, format string, bodyPost any) (*ResponsePOST, e
 	if err := json.Unmarshal(bodyResp, &responsePOST); err != nil {
 		return nil, fmt.Errorf("Error parsing request body: %s", err)
 	}
+
+	responsePOSTUalabis := &domain.ResponseUalabisPOST{
+		IdTx:        responsePOST.Data.IdTx,
+		Type:        responsePOST.Data.Type,
+		UUID:        responsePOST.Data.UUID,
+		OrderNumber: responsePOST.Data.OrderNumber,
+		Amount:      responsePOST.Data.Amount,
+		Status:      responsePOST.Data.Status,
+		RefNumber:   responsePOST.Data.RefNumber,
+		Links: domain.ResLinks{
+			CheckoutLink: responsePOST.Data.Links.CheckoutLink,
+			LinkSuccess:  responsePOST.Data.Links.LinkSuccess,
+			LinkFailed:   responsePOST.Data.Links.LinkFailed,
+		},
+	}
+
+	responsePOST.Data = *responsePOSTUalabis
 
 	return &responsePOST, nil
 

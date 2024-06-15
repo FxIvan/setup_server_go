@@ -12,5 +12,5 @@ type RepoService interface {
 	GetUserStorage(idUser string, collectionName string) (*domain.User, error)
 	//GiftCard
 	CreateNumberGiftCardStorage(amount int, collectionName string) ([]string, error)
-	LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment any, infoDomainCoupon *domain.Coupon) (string, error)
+	LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (string, error)
 }

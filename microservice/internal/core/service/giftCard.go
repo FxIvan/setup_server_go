@@ -57,7 +57,21 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 		return nil, err
 	}
 
-	_, err = gc.repo.LinkingGiftCardUserStorage("couponsalluser", allCode, data, coupon)
+	bodyInfoPayment := &domain.ResponseUalabisPOST{
+		IdTx:        data.Data.IdTx,
+		Type:        data.Data.Type,
+		UUID:        data.Data.UUID,
+		OrderNumber: data.Data.OrderNumber,
+		Amount:      data.Data.Amount,
+		Status:      data.Data.Status,
+		RefNumber:   data.Data.RefNumber,
+		Links: domain.ResLinks{
+			CheckoutLink: data.Data.Links.CheckoutLink,
+			LinkSuccess:  data.Data.Links.LinkSuccess,
+		},
+	}
+
+	_, err = gc.repo.LinkingGiftCardUserStorage("couponsalluser", allCode, bodyInfoPayment, coupon)
 	if err != nil {
 		return nil, err
 	}

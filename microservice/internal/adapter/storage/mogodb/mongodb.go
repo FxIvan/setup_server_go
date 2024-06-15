@@ -183,7 +183,7 @@ func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string)
 	return listCode, nil
 }
 
-func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment any, infoDomainCoupon *domain.Coupon) (string, error) {
+func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (string, error) {
 
 	collection := m.Database.Collection(collectionName)
 
@@ -195,15 +195,8 @@ func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []st
 			ExpireAt: time.Now().AddDate(0, 0, 30),
 			IsUsed:   false,
 			Price:    infoDomainCoupon.PriceCoupon,
-			LinkPayment: mongodb_model.LinkPaymentInfo{
-				Link:        "",
-				SuccessLink: "",
-				FailedLink:  "",
-			},
 		})
 	}
-
-	fmt.Print("Cantidad de couponMetaData", len(couponMetaData))
 
 	modelCoupon := &mongodb_model.CouponModel{
 		Owner:         infoDomainCoupon.Owner,
@@ -213,11 +206,22 @@ func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []st
 		PriceCoupon:   strconv.Itoa(infoDomainCoupon.PriceCoupon),
 		Total:         strconv.Itoa(infoDomainCoupon.Total),
 		Codes:         couponMetaData,
+		InfoPayment: mongodb_model.LinkPaymentInfo{
+			OrderNumber: infoPayment.OrderNumber,
+			Amount:      infoPayment.Amount,
+			Status:      infoPayment.Status,
+			RefNumber:   infoPayment.RefNumber,
+			Type:        infoPayment.Type,
+			IdTx:        infoPayment.IdTx,
+			UUID:        infoPayment.UUID,
+			Link:        infoPayment.Links.CheckoutLink,
+			SuccessLink: infoPayment.Links.LinkSuccess,
+			FailedLink:  infoPayment.Links.LinkFailed,
+		},
 	}
 
 	_, err := collection.InsertOne(context.Background(), modelCoupon)
 	if err != nil {
-		fmt.Print("Erro ---->", err)
 		return "", err
 	}
 

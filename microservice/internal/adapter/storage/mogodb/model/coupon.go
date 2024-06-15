@@ -19,12 +19,12 @@ type LinkPaymentInfo struct {
 	SuccessLink string
 	FailedLink  string
 	OrderNumber string
-	Currency    string
 	Amount      string
-	IDPayment   string
 	RefNumber   string
 	Status      string
-	UUIDPayment string
+	Type        string
+	IdTx        string
+	UUID        string
 }
 
 type CouponMetaData struct {
@@ -37,7 +37,6 @@ type CouponMetaData struct {
 	Alias           string
 	Wallet          string
 	Red             string
-	LinkPayment     LinkPaymentInfo
 }
 
 type CouponModel struct {
@@ -48,6 +47,7 @@ type CouponModel struct {
 	PriceCoupon   string `bson:"priceCoupon"`
 	Total         string `bson:"total"`
 	Codes         []CouponMetaData
+	InfoPayment   LinkPaymentInfo
 }
 
 type CodeCoupon struct {
