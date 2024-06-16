@@ -256,3 +256,21 @@ func (m *MongoDB) SearchInfoPaymentStorage(collectionName string, idReference st
 
 	return &codeCoupon, nil
 }
+
+func (m *MongoDB) UpdateStatusUala(collectionName string, idReference string, status string) error {
+	collection := m.Database.Collection(collectionName)
+	filter := bson.D{{"idDReferentProcess", idReference}}
+	update := bson.D{
+		{"$set", bson.D{
+			{"infopayment.status", status},
+		}},
+	}
+
+	_, err := collection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		m.log.ErrorLog.Print(err)
+		return err
+	}
+
+	return nil
+}

@@ -214,3 +214,7 @@ func (m *MySQL) LinkingGiftCardUserStorage(collectionName string, coupons []stri
 func (m *MySQL) SearchInfoPaymentStorage(collectionName string, idReference string) (*mongodb_model.CouponModel, error) {
 	return nil, nil
 }
+
+func (m *MySQL) UpdateStatusUala(collectionName string, idReference string, status string) error {
+	return nil
+}

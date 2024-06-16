@@ -16,4 +16,5 @@ type RepoService interface {
 	LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (string, error)
 	//Payment
 	SearchInfoPaymentStorage(collectionName string, idReference string) (*mongodb_model.CouponModel, error)
+	UpdateStatusUala(collectionName string, idReference string, status string) error
 }

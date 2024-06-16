@@ -20,14 +20,14 @@ func NewVerifyPaymentService(db port.RepoService, logTerminal *config.TerminalLo
 	}
 }
 
-func (vp *VerifyPaymentService) UalaVerifyPaymentService(uuid string, statusPayment string) error {
+func (vp *VerifyPaymentService) UalaVerifyPaymentService(uuid string, statusPayment string) (string, error) {
 
 	//Buscamos el id de referencia creado por nosotros para buscar informacion del pago
 	infoPaymentDB, err := vp.repo.SearchInfoPaymentStorage("couponsalluser", uuid)
 
 	if err != nil {
 		vp.log.ErrorLog.Println(err)
-		return err
+		return "", err
 	}
 
 	//Agarramos el ID del pago y buscamos en el miscroservicio
@@ -36,15 +36,14 @@ func (vp *VerifyPaymentService) UalaVerifyPaymentService(uuid string, statusPaym
 	res, err := util.GETVerifyPaymentUala(url)
 	if err != nil {
 		vp.log.ErrorLog.Println(err)
-		return err
+		return "", err
 	}
 
-	//Actualizamos el estado del pago
-	fmt.Println("------------------- UalaVerifyPaymentService -------------------")
-	fmt.Println(res)
-	fmt.Println("------------------- UalaVerifyPaymentService -------------------")
-
 	//Aqui se debe actualizar es estado del PAGO en la base de datos
-
-	return nil
+	err = vp.repo.UpdateStatusUala("couponsalluser", uuid, res.Data.Status)
+	if err != nil {
+		vp.log.ErrorLog.Println(err)
+		return "", err
+	}
+	return res.Data.Status, nil
 }

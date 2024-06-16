@@ -18,10 +18,10 @@ func NewVerifyPaymentHandler(svc *service.VerifyPaymentService) *VerifyPaymentHa
 func (vp *VerifyPaymentHandler) VerifyPaymentHTTP(ctx *gin.Context) {
 	uuidParam := ctx.Query("uuid")
 	statusPayment := ctx.Query("status")
-	err := vp.svc.UalaVerifyPaymentService(uuidParam, statusPayment)
+	res, err := vp.svc.UalaVerifyPaymentService(uuidParam, statusPayment)
 	if err != nil {
 		handleError(ctx, err)
 		return
 	}
-	handleSuccess(ctx, "Payment Verify Success")
+	handleSuccess(ctx, res)
 }
