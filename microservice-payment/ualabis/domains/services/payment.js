@@ -50,12 +50,13 @@ const GetPayment = async (req,res) => {
 const VerifyUala = async (req,res) => {
     try{
         const {id} = req.params;
+        console.log(id);
         const order = await UalaApiCheckout.getOrder(id);
-        console.log("--------------- VerifyUala ---------------\n")
         console.log(order);
-        console.log("--------------- VerifyUala ---------------")
         res.status(200).send({
-             order
+            status:200,
+            message: "Payment verified",
+            data:order
         });
     }catch(err){
         res.status(500).send({

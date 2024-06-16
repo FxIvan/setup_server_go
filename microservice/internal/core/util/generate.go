@@ -3,6 +3,7 @@ package util
 import (
 	"log"
 	"os/exec"
+	"strings"
 )
 
 func GenerateUUIDUnique() string {
@@ -10,5 +11,5 @@ func GenerateUUIDUnique() string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return string(newUUID)
+	return strings.TrimSpace(string(newUUID))
 }

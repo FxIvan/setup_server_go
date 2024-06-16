@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/fxivan/set_up_server/microservice/configuration"
@@ -238,4 +239,20 @@ func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []st
 	}
 
 	return "Gift Card Created", nil
+}
+
+func (m *MongoDB) SearchInfoPaymentStorage(collectionName string, idReference string) (*mongodb_model.CouponModel, error) {
+	var codeCoupon mongodb_model.CouponModel
+	collection := m.Database.Collection(collectionName)
+	cleanIDReference := strings.TrimSpace(idReference)
+
+	filter := bson.D{{"idDReferentProcess", cleanIDReference}}
+
+	err := collection.FindOne(context.Background(), filter).Decode(&codeCoupon)
+	if err != nil {
+		m.log.ErrorLog.Print(err)
+		return nil, err
+	}
+
+	return &codeCoupon, nil
 }

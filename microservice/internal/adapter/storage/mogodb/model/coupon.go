@@ -8,47 +8,47 @@ import (
 
 type BeneficiaryUserInfo struct {
 	ID     primitive.ObjectID `bson:"userBeneficiaryID"`
-	Name   string
-	Code   int
-	Mobile int
-	Email  string
+	Name   string             `bson:"name"`
+	Code   int                `bson:"code"`
+	Mobile int                `bson:"mobile"`
+	Email  string             `bson:"email"`
 }
 
 type LinkPaymentInfo struct {
-	Link        string
-	SuccessLink string
-	FailedLink  string
-	OrderNumber string
-	Amount      string
-	RefNumber   string
-	Status      string
-	Type        string
-	IdTx        string
-	UUID        string
+	Link        string `bson:"link"`
+	SuccessLink string `bson:"successlink"`
+	FailedLink  string `bson:"failedlink"`
+	OrderNumber string `bson:"ordernumber"`
+	Amount      string `bson:"amount"`
+	RefNumber   string `bson:"refnumber"`
+	Status      string `bson:"status"`
+	Type        string `bson:"type"`
+	IdTx        string `bson:"idtx"`
+	UUID        string `bson:"uuid"`
 }
 
 type CouponMetaData struct {
-	Code            string
-	ExpireAt        time.Time
-	BeneficiaryUser BeneficiaryUserInfo
-	IsUsed          bool
-	Price           int
-	CVU             string
-	Alias           string
-	Wallet          string
-	Red             string
+	Code            string              `bson:"code"`
+	ExpireAt        time.Time           `bson:"expireat"`
+	BeneficiaryUser BeneficiaryUserInfo `bson:"beneficiaryuser"`
+	IsUsed          bool                `bson:"isused"`
+	Price           int                 `bson:"price"`
+	CVU             string              `bson:"cvu"`
+	Alias           string              `bson:"alias"`
+	Wallet          string              `bson:"wallet"`
+	Red             string              `bson:"red"`
 }
 
 type CouponModel struct {
-	IDReferentProcess string `bson:"idDReferentProcess"`
-	Owner             string `bson:"idOwner"`
-	Title             string `bson:"title"`
-	Description       string `bson:"description"`
-	AmountCoupons     string `bson:"amountCoupons"`
-	PriceCoupon       string `bson:"priceCoupon"`
-	Total             string `bson:"total"`
-	Codes             []CouponMetaData
-	InfoPayment       LinkPaymentInfo
+	IDReferentProcess string           `bson:"idDReferentProcess"`
+	Owner             string           `bson:"idOwner"`
+	Title             string           `bson:"title"`
+	Description       string           `bson:"description"`
+	AmountCoupons     string           `bson:"amountCoupons"`
+	PriceCoupon       string           `bson:"priceCoupon"`
+	Total             string           `bson:"total"`
+	Codes             []CouponMetaData `bson:"codes"`
+	InfoPayment       LinkPaymentInfo  `bson:"infopayment"`
 }
 
 type CodeCoupon struct {

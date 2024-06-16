@@ -8,6 +8,7 @@ import (
 
 	"github.com/fxivan/set_up_server/microservice/configuration"
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
+	mongodb_model "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
 	mysql_model "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mysql/model"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/fxivan/set_up_server/microservice/internal/core/util"
@@ -208,4 +209,8 @@ func (m *MySQL) CreateNumberGiftCardStorage(amount int, collectionName string) (
 
 func (m *MySQL) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (string, error) {
 	return "", nil
+}
+
+func (m *MySQL) SearchInfoPaymentStorage(collectionName string, idReference string) (*mongodb_model.CouponModel, error) {
+	return nil, nil
 }

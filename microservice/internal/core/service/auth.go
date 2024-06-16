@@ -7,6 +7,7 @@ import (
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/fxivan/set_up_server/microservice/internal/core/port"
 	"github.com/fxivan/set_up_server/microservice/internal/core/util"
+	//Me aparecio un error y lo resolvi instalando go get golang.org/x/crypto
 )
 
 type AuthService struct {

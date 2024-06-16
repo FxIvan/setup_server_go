@@ -1,8 +1,11 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
 	"github.com/fxivan/set_up_server/microservice/internal/core/port"
+	"github.com/fxivan/set_up_server/microservice/internal/core/util"
 )
 
 type VerifyPaymentService struct {
@@ -20,15 +23,28 @@ func NewVerifyPaymentService(db port.RepoService, logTerminal *config.TerminalLo
 func (vp *VerifyPaymentService) UalaVerifyPaymentService(uuid string, statusPayment string) error {
 
 	//Buscamos el id de referencia creado por nosotros para buscar informacion del pago
+	infoPaymentDB, err := vp.repo.SearchInfoPaymentStorage("couponsalluser", uuid)
 
-	//Agarramos el ID del pago y buscamos en el miscroservicio
-	/*res, err := util.GETVerifyPaymentUala(url)
 	if err != nil {
 		vp.log.ErrorLog.Println(err)
 		return err
 	}
 
-	vp.log.InfoLog.Println("Response Verify Payment --->", res)*/
+	//Agarramos el ID del pago y buscamos en el miscroservicio
+	url := fmt.Sprintf("http://localhost:3000/api/verify/uala/%s", infoPaymentDB.InfoPayment.UUID)
+
+	res, err := util.GETVerifyPaymentUala(url)
+	if err != nil {
+		vp.log.ErrorLog.Println(err)
+		return err
+	}
+
+	//Actualizamos el estado del pago
+	fmt.Println("------------------- UalaVerifyPaymentService -------------------")
+	fmt.Println(res)
+	fmt.Println("------------------- UalaVerifyPaymentService -------------------")
+
+	//Aqui se debe actualizar es estado del PAGO en la base de datos
 
 	return nil
 }

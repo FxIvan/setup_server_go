@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"time"
 
+	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/response"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 )
 
@@ -72,8 +74,8 @@ func POSTCreateGiftCardMicroservice(URL string, format string, bodyPost any) (*R
 
 }
 
-func GETVerifyPaymentUala(URL string) (*domain.ResponseUalabisPOSTVerify, error) {
-	var resPOST domain.ResponseUalabisPOSTVerify
+func GETVerifyPaymentUala(URL string) (*response.ResVerifyPaymentUala, error) {
+	var resPOST response.ResVerifyPaymentUala
 
 	resp, err := http.Get(URL)
 	if err != nil {
@@ -81,7 +83,8 @@ func GETVerifyPaymentUala(URL string) (*domain.ResponseUalabisPOSTVerify, error)
 	}
 
 	defer resp.Body.Close()
-	bodyResp, err := ioutil.ReadAll(resp.Body)
+	bodyResp, err := io.ReadAll(resp.Body)
+
 	if err != nil {
 		return nil, fmt.Errorf("error al leer el cuerpo de la respuesta: %v", err)
 	}
