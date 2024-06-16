@@ -12,3 +12,11 @@ type ResVerifyPaymentUala struct {
 	Message string     `json:"message"`
 	Data    DataStruct `json:"data"`
 }
+
+type ResCreatedGiftCard struct {
+	Title         string `json:"title"`
+	Description   string `json:"description"`
+	AmountCoupons int    `json:"amountCoupons"`
+	PriceCoupon   int    `json:"priceCoupon"`
+	Total         int    `json:"total"`
+}

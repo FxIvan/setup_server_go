@@ -207,14 +207,14 @@ func (m *MySQL) CreateNumberGiftCardStorage(amount int, collectionName string) (
 	return nil, nil
 }
 
-func (m *MySQL) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (string, error) {
-	return "", nil
+func (m *MySQL) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*domain.Coupon, error) {
+	return nil, nil
 }
 
 func (m *MySQL) SearchInfoPaymentStorage(collectionName string, idReference string) (*mongodb_model.CouponModel, error) {
 	return nil, nil
 }
 
-func (m *MySQL) UpdateStatusUala(collectionName string, idReference string, status string) error {
+func (m *MySQL) UpdateStatusUalaStorage(collectionName string, idReference string, status string) error {
 	return nil
 }

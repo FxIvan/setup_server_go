@@ -5,6 +5,7 @@ import (
 
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/request"
+	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/response"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/fxivan/set_up_server/microservice/internal/core/port"
 	"github.com/fxivan/set_up_server/microservice/internal/core/util"
@@ -15,13 +16,6 @@ type GiftCardService struct {
 	log  *config.TerminalLog
 }
 
-type BodyPaymentMicroservice struct {
-	Amount         int    `json:"amount"`
-	Description    string `json:"description"`
-	SuccesResponse string `json:"succesResponse"`
-	FailedResponse string `json:"failedResponse"`
-}
-
 func NewGiftCardService(repo port.RepoService, logTerminal *config.TerminalLog) *GiftCardService {
 	return &GiftCardService{
 		repo: repo,
@@ -29,7 +23,7 @@ func NewGiftCardService(repo port.RepoService, logTerminal *config.TerminalLog) 
 	}
 }
 
-func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequest, infoToken *domain.TokenPayload) (*util.ResponsePOST, error) {
+func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequest, infoToken *domain.TokenPayload) (*response.ResCreatedGiftCard, error) {
 
 	total := body.AmountCoupons * body.PriceCoupons
 
@@ -43,7 +37,7 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 		Total:         total,
 	}
 
-	bodyPost := &BodyPaymentMicroservice{
+	bodyPost := &request.RequestPaymentMicroservice{
 		Amount:         coupon.Total,
 		Description:    coupon.Description,
 		SuccesResponse: fmt.Sprintf("https://api.tech/v1/verify/payment/uala?uuid=%s&status=success", coupon.IDReference),
@@ -53,13 +47,13 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 	data, err := util.POSTCreateGiftCardMicroservice("http://localhost:3000/api/create/payment", "application/json ", bodyPost)
 	if err != nil {
 		gc.log.ErrorLog.Println(err)
-		return nil, err
+		return nil, domain.ErrCreatedPaymentUala
 	}
 
 	allCode, err := gc.repo.CreateNumberGiftCardStorage(coupon.AmountCoupons, "coupons")
 	if err != nil {
 		gc.log.ErrorLog.Println(err)
-		return nil, err
+		return nil, domain.ErrCreatedNumberCoupons
 	}
 
 	bodyInfoPayment := &domain.ResponseUalabisPOST{
@@ -77,11 +71,19 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 		},
 	}
 
-	_, err = gc.repo.LinkingGiftCardUserStorage("couponsalluser", allCode, bodyInfoPayment, coupon)
+	dataLink, err := gc.repo.LinkingGiftCardUserStorage("couponsalluser", allCode, bodyInfoPayment, coupon)
 	if err != nil {
 		gc.log.ErrorLog.Println(err)
-		return nil, err
+		return nil, domain.ErrLinkGiftCard
 	}
 
-	return nil, nil
+	res := &response.ResCreatedGiftCard{
+		Title:         dataLink.Title,
+		Description:   dataLink.Description,
+		AmountCoupons: dataLink.AmountCoupons,
+		PriceCoupon:   dataLink.PriceCoupon,
+		Total:         dataLink.Total,
+	}
+
+	return res, nil
 }

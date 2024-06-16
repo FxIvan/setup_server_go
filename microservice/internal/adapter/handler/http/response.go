@@ -46,6 +46,14 @@ var errorStatusMap = map[error]int{
 	domain.ErrNoUpdatedData:              http.StatusBadRequest,
 	domain.ErrInsufficientStock:          http.StatusBadRequest,
 	domain.ErrInsufficientPayment:        http.StatusBadRequest,
+	domain.ErrCreatedPaymentUala:         http.StatusInternalServerError,
+	domain.ErrCreatedNumberCoupons:       http.StatusInternalServerError,
+	domain.ErrLinkGiftCard:               http.StatusInternalServerError,
+	domain.ErrorHashPassword:             http.StatusInternalServerError,
+	domain.ErrCreatedUser:                http.StatusInternalServerError,
+	domain.ErrSearchPayment:              http.StatusInternalServerError,
+	domain.ErrVerifyPayment:              http.StatusInternalServerError,
+	domain.ErrUpdateStatus:               http.StatusInternalServerError,
 }
 
 func newUserResponse(user *domain.User) *userResponse {

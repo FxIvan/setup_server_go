@@ -24,7 +24,7 @@ func NewAuthService(repo port.RepoService, ts port.TokenService, logTerminal *co
 	}
 }
 
-func (au *AuthService) Login(ctx context.Context, email string, password string) (string, error) {
+func (au *AuthService) LoginService(ctx context.Context, email string, password string) (string, error) {
 	user, err := au.repo.GetUserEmailStorage(email, "users")
 	if err != nil {
 		au.log.ErrorLog.Println(err)
@@ -40,7 +40,7 @@ func (au *AuthService) Login(ctx context.Context, email string, password string)
 	accesToken, err := au.ts.CreateToken(user)
 	if err != nil {
 		au.log.ErrorLog.Println(err)
-		return "", err
+		return "", domain.ErrInvalidToken
 	}
 
 	/*_, err = au.ts.VerifyToken(accesToken)

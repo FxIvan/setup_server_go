@@ -37,4 +37,20 @@ var (
 	ErrUnauthorized = errors.New("user is unauthorized to access the resource")
 	// ErrForbidden is an error for when the user is forbidden to access the resource
 	ErrForbidden = errors.New("user is forbidden to access the resource")
+	// ErrCreatedPaymentUala is an error when the uala api has an error when creating an order.
+	ErrCreatedPaymentUala = errors.New("error when creating payment with uala")
+	// ErrCreatedNumberCoupons is an error when creating a number of coupons
+	ErrCreatedNumberCoupons = errors.New("error when creating a number of coupons")
+	// ErrLinkGiftCard is an error when vinculing card with info payment
+	ErrLinkGiftCard = errors.New("error when vinculing card with info payment")
+	// ErrorHashPassword an error getting the user's password from the db
+	ErrorHashPassword = errors.New("error getting the user's password")
+	// ErrorCreatedUser an error creating the user
+	ErrCreatedUser = errors.New("error creating the user")
+	// ErrSearchPayment an error searching the payment
+	ErrSearchPayment = errors.New("error searching the payment")
+	// ErrVerifyPayment an error verifying the payment
+	ErrVerifyPayment = errors.New("error verifying the payment")
+	//ErrUpdateStatusUala an error updating the status of the payment
+	ErrUpdateStatus = errors.New("error updating the status of the payment")
 )

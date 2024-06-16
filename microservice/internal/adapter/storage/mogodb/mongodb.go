@@ -194,7 +194,7 @@ func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string)
 	return listCode, nil
 }
 
-func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (string, error) {
+func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*domain.Coupon, error) {
 
 	collection := m.Database.Collection(collectionName)
 
@@ -235,10 +235,20 @@ func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []st
 	_, err := collection.InsertOne(context.Background(), modelCoupon)
 	if err != nil {
 		m.log.ErrorLog.Println(err)
-		return "", err
+		return nil, err
 	}
 
-	return "Gift Card Created", nil
+	response := &domain.Coupon{
+		IDReference:   modelCoupon.IDReferentProcess,
+		Owner:         modelCoupon.Owner,
+		Title:         modelCoupon.Title,
+		Description:   modelCoupon.Description,
+		AmountCoupons: infoDomainCoupon.AmountCoupons,
+		PriceCoupon:   infoDomainCoupon.PriceCoupon,
+		Total:         infoDomainCoupon.Total,
+	}
+
+	return response, nil
 }
 
 func (m *MongoDB) SearchInfoPaymentStorage(collectionName string, idReference string) (*mongodb_model.CouponModel, error) {
@@ -257,7 +267,7 @@ func (m *MongoDB) SearchInfoPaymentStorage(collectionName string, idReference st
 	return &codeCoupon, nil
 }
 
-func (m *MongoDB) UpdateStatusUala(collectionName string, idReference string, status string) error {
+func (m *MongoDB) UpdateStatusUalaStorage(collectionName string, idReference string, status string) error {
 	collection := m.Database.Collection(collectionName)
 	filter := bson.D{{"idDReferentProcess", idReference}}
 	update := bson.D{

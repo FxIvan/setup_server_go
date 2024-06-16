@@ -13,8 +13,8 @@ type RepoService interface {
 	GetUserStorage(idUser string, collectionName string) (*domain.User, error)
 	//GiftCard
 	CreateNumberGiftCardStorage(amount int, collectionName string) ([]string, error)
-	LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (string, error)
+	LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*domain.Coupon, error)
 	//Payment
 	SearchInfoPaymentStorage(collectionName string, idReference string) (*mongodb_model.CouponModel, error)
-	UpdateStatusUala(collectionName string, idReference string, status string) error
+	UpdateStatusUalaStorage(collectionName string, idReference string, status string) error
 }

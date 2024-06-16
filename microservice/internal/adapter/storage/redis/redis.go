@@ -55,14 +55,14 @@ func (m *Redis) CreateNumberGiftCardStorage(amount int, collectionName string) (
 	return nil, nil
 }
 
-func (m *Redis) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (string, error) {
-	return "", nil
+func (m *Redis) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*domain.Coupon, error) {
+	return nil, nil
 }
 
 func (m *Redis) SearchInfoPaymentStorage(collectionName string, idReference string) (*mongodb_model.CouponModel, error) {
 	return nil, nil
 }
 
-func (m *Redis) UpdateStatusUala(collectionName string, idReference string, status string) error {
+func (m *Redis) UpdateStatusUalaStorage(collectionName string, idReference string, status string) error {
 	return nil
 }

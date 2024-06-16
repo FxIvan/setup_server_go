@@ -28,7 +28,7 @@ func (m *UserService) CreateUserService(userModel *request.RegisterUserRequest) 
 	hashedPassword, err := util.HashPassword(userModel.Password)
 	if err != nil {
 		m.log.ErrorLog.Println(err)
-		return "", err
+		return "", domain.ErrorHashPassword
 	}
 
 	modelUser := &domain.User{
@@ -39,19 +39,22 @@ func (m *UserService) CreateUserService(userModel *request.RegisterUserRequest) 
 		CreatedAt: time.Time{},
 		UpdatedAt: time.Time{},
 	}
-	salida, err := m.db.CreateUserStorage(modelUser, "users")
+
+	response, err := m.db.CreateUserStorage(modelUser, "users")
+
 	if err != nil {
 		m.log.ErrorLog.Println(err)
-		return "", err
+		return "", domain.ErrCreatedUser
 	}
 
-	return salida, nil
+	return response, nil
 }
 
 func (m *UserService) GetListUserService(ctx context.Context, skip, limit uint64) ([]domain.User, error) {
 	var users []domain.User
 
 	users, err := m.db.ListUsersStorage("users")
+
 	if err != nil {
 		m.log.ErrorLog.Println(err)
 		return nil, domain.ErrDataNotFound

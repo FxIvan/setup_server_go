@@ -23,7 +23,7 @@ func (au *AuthHandler) LoginUserHTTP(ctx *gin.Context) {
 		return
 	}
 
-	token, err := au.svc.Login(ctx, user.Email, user.Password)
+	token, err := au.svc.LoginService(ctx, user.Email, user.Password)
 	if err != nil {
 		handleError(ctx, err)
 		return
