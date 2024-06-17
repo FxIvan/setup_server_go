@@ -99,8 +99,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	//listenAddr := fmt.Sprintf(":%s", config.HTTP.Port)
-	listenAddr := fmt.Sprintf("%s:%s", config.HTTP.URL, config.HTTP.Port)
+	listenAddr := fmt.Sprintf(":%s", config.HTTP.Port)
+	//listenAddr := fmt.Sprintf("%s:%s", config.HTTP.URL, config.HTTP.Port)
 	info_log.Printf("Starting server on %s", listenAddr)
 	err = router.Serve(listenAddr)
 	if err != nil {

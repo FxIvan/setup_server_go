@@ -44,7 +44,7 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 		FailedResponse: fmt.Sprintf("https://api.tech/v1/verify/payment/uala?uuid=%s&status=failed", coupon.IDReference),
 	}
 
-	data, err := util.POSTCreateGiftCardMicroservice("http://localhost:3000/api/create/payment", "application/json ", bodyPost)
+	data, err := util.POSTCreateGiftCardMicroservice("http://nodejs-ualabis:5000/api/create/payment", "application/json ", bodyPost)
 	if err != nil {
 		gc.log.ErrorLog.Println(err)
 		return nil, domain.ErrCreatedPaymentUala

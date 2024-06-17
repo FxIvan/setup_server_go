@@ -1,15 +1,10 @@
 package util
 
 import (
-	"log"
-	"os/exec"
-	"strings"
+	"github.com/google/uuid"
 )
 
 func GenerateUUIDUnique() string {
-	newUUID, err := exec.Command("uuidgen").Output()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return strings.TrimSpace(string(newUUID))
+	newUUID := uuid.New()
+	return newUUID.String()
 }

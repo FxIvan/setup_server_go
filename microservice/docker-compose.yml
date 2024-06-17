@@ -16,6 +16,8 @@ services:
         PRIVATE_KEY: ${PRIVATE_KEY}
         PUBLIC_KEY: ${PUBLIC_KEY}
         TOKEN_DURATION: ${TOKEN_DURATION}
+    networks:
+      - shared_network
 
   mongodb:
     image: mongo:latest
@@ -27,6 +29,12 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    networks:
+      - shared_network
   
 volumes:
   mongo-data:
+
+networks:
+  shared_network:
+    external: true
