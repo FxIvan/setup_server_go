@@ -9,9 +9,10 @@ import (
 
 type (
 	Container struct {
-		HTTP        *HTTP
-		Token       *Token
-		TerminalLog *TerminalLog
+		HTTP            *HTTP
+		Token           *Token
+		TerminalLog     *TerminalLog
+		URLMicroservice *URLMicroservice
 	}
 
 	Token struct {
@@ -30,6 +31,10 @@ type (
 	TerminalLog struct {
 		ErrorLog *log.Logger
 		InfoLog  *log.Logger
+	}
+
+	URLMicroservice struct {
+		HostCreatePaymentNodeJS string
 	}
 )
 
@@ -59,9 +64,14 @@ func New() (*Container, error) {
 		InfoLog:  log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
 	}
 
+	urlMicroservice := &URLMicroservice{
+		HostCreatePaymentNodeJS: os.Getenv("URL_CREATE_PAYMENT_NODEJS"),
+	}
+
 	return &Container{
 		http,
 		token,
 		terminalLog,
+		urlMicroservice,
 	}, nil
 }

@@ -12,14 +12,16 @@ import (
 )
 
 type GiftCardService struct {
-	repo port.RepoService
-	log  *config.TerminalLog
+	repo   port.RepoService
+	log    *config.TerminalLog
+	config *config.URLMicroservice
 }
 
-func NewGiftCardService(repo port.RepoService, logTerminal *config.TerminalLog) *GiftCardService {
+func NewGiftCardService(configEnv *config.URLMicroservice, repo port.RepoService, logTerminal *config.TerminalLog) *GiftCardService {
 	return &GiftCardService{
-		repo: repo,
-		log:  logTerminal,
+		repo:   repo,
+		log:    logTerminal,
+		config: configEnv,
 	}
 }
 
@@ -44,7 +46,9 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 		FailedResponse: fmt.Sprintf("https://api.tech/v1/verify/payment/uala?uuid=%s&status=failed", coupon.IDReference),
 	}
 
-	data, err := util.POSTCreateGiftCardMicroservice("http://nodejs-ualabis:5000/api/create/payment", "application/json ", bodyPost)
+	URLPost := fmt.Sprintf("%s/create/payment", gc.config.HostCreatePaymentNodeJS)
+
+	data, err := util.POSTCreateGiftCardMicroservice(URLPost, "application/json ", bodyPost)
 	if err != nil {
 		gc.log.ErrorLog.Println(err)
 		return nil, domain.ErrCreatedPaymentUala

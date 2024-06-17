@@ -16,6 +16,7 @@ services:
         PRIVATE_KEY: ${PRIVATE_KEY}
         PUBLIC_KEY: ${PUBLIC_KEY}
         TOKEN_DURATION: ${TOKEN_DURATION}
+        URL_CREATE_PAYMENT_NODEJS: ${URL_CREATE_PAYMENT_NODEJS}
     networks:
       - shared_network
 

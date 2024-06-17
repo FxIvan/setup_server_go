@@ -78,11 +78,11 @@ func main() {
 	authHandler := http.NewAuthHandler(authService)
 
 	//GiftCard
-	giftCardService := service.NewGiftCardService(repo, config.TerminalLog)
+	giftCardService := service.NewGiftCardService(config.URLMicroservice, repo, config.TerminalLog)
 	giftCardHandler := http.NewGiftCardHandler(giftCardService)
 
 	//VerifyPayment
-	verifyPaymentService := service.NewVerifyPaymentService(repo, config.TerminalLog)
+	verifyPaymentService := service.NewVerifyPaymentService(config.URLMicroservice, repo, config.TerminalLog)
 	verifyPaymentHandler := http.NewVerifyPaymentHandler(verifyPaymentService)
 
 	router, err := http.NewRouter(

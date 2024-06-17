@@ -10,14 +10,16 @@ import (
 )
 
 type VerifyPaymentService struct {
-	repo port.RepoService
-	log  *config.TerminalLog
+	repo   port.RepoService
+	log    *config.TerminalLog
+	config *config.URLMicroservice
 }
 
-func NewVerifyPaymentService(db port.RepoService, logTerminal *config.TerminalLog) *VerifyPaymentService {
+func NewVerifyPaymentService(config *config.URLMicroservice, db port.RepoService, logTerminal *config.TerminalLog) *VerifyPaymentService {
 	return &VerifyPaymentService{
-		repo: db,
-		log:  logTerminal,
+		repo:   db,
+		log:    logTerminal,
+		config: config,
 	}
 }
 
@@ -30,7 +32,7 @@ func (vp *VerifyPaymentService) UalaVerifyPaymentService(uuid string, statusPaym
 		return "", domain.ErrSearchPayment
 	}
 
-	url := fmt.Sprintf("http://localhost:3000/api/verify/uala/%s", infoPaymentDB.InfoPayment.UUID)
+	url := fmt.Sprintf("%s/verify/uala/%s", vp.config.HostCreatePaymentNodeJS, infoPaymentDB.InfoPayment.UUID)
 
 	res, err := util.GETVerifyPaymentUala(url)
 	if err != nil {
