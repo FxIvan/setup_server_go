@@ -203,11 +203,11 @@ func (m *MySQL) GetUserStorage(idUser string, collectionName string) (*domain.Us
 	return modelUser, nil
 }
 
-func (m *MySQL) CreateNumberGiftCardStorage(amount int, collectionName string) ([]string, error) {
+func (m *MySQL) CreateNumberGiftCardStorage(amount int, collectionName string, infoToken *domain.TokenPayload, infoCoupon *domain.Coupon) ([]mongodb_model.CodeCoupon, error) {
 	return nil, nil
 }
 
-func (m *MySQL) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*domain.Coupon, error) {
+func (m *MySQL) LinkingGiftCardUserStorage(collectionName string, coupons []mongodb_model.CodeCoupon, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*domain.Coupon, error) {
 	return nil, nil
 }
 

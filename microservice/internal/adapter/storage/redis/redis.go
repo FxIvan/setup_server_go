@@ -51,11 +51,11 @@ func (m *Redis) GetUserStorage(idUser string, collectionName string) (*domain.Us
 	return nil, nil
 }
 
-func (m *Redis) CreateNumberGiftCardStorage(amount int, collectionName string) ([]string, error) {
+func (m *Redis) CreateNumberGiftCardStorage(amount int, collectionName string, infoToken *domain.TokenPayload, infoCoupon *domain.Coupon) ([]mongodb_model.CodeCoupon, error) {
 	return nil, nil
 }
 
-func (m *Redis) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*domain.Coupon, error) {
+func (m *Redis) LinkingGiftCardUserStorage(collectionName string, coupons []mongodb_model.CodeCoupon, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*domain.Coupon, error) {
 	return nil, nil
 }
 

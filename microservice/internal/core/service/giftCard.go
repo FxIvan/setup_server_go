@@ -54,7 +54,7 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 		return nil, domain.ErrCreatedPaymentUala
 	}
 
-	allCode, err := gc.repo.CreateNumberGiftCardStorage(coupon.AmountCoupons, "coupons")
+	allCode, err := gc.repo.CreateNumberGiftCardStorage(coupon.AmountCoupons, "coupons", infoToken, coupon)
 	if err != nil {
 		gc.log.ErrorLog.Println(err)
 		return nil, domain.ErrCreatedNumberCoupons
@@ -93,6 +93,6 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 }
 
 func (gc *GiftCardService) InsertCodeService(body request.InsertCodeRequest) (string, error) {
-	
+
 	return "", nil
 }

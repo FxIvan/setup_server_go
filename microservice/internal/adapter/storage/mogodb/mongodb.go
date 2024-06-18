@@ -153,7 +153,7 @@ func (m *MongoDB) GetUserStorage(idUser string, collectionName string) (*domain.
 	return user, nil
 }
 
-func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string) ([]string, error) {
+func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string, infoToken *domain.TokenPayload, infoCoupon *domain.Coupon) ([]mongodb_model.CodeCoupon, error) {
 	var codeCoupon []mongodbModel.CodeCoupon
 	collection := m.Database.Collection(collectionName)
 
@@ -168,6 +168,7 @@ func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string)
 	}
 
 	var listCode []string
+	var allCoupons []mongodb_model.CodeCoupon
 
 	listCode = util.RandSeq(8, amount)
 
@@ -181,7 +182,11 @@ func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string)
 		}
 
 		codeOne := &mongodbModel.CodeCoupon{
-			Code: listCode[i],
+			ID:        primitive.NewObjectID(),
+			UserOwner: infoToken.UserID,
+			Code:      listCode[i],
+			IsUsed:    false,
+			Price:     infoCoupon.PriceCoupon,
 		}
 
 		_, err = collection.InsertOne(context.Background(), codeOne)
@@ -189,12 +194,20 @@ func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string)
 			m.log.ErrorLog.Println(err)
 			return nil, err
 		}
+
+		allCoupons = append(allCoupons, mongodb_model.CodeCoupon{
+			ID:        codeOne.ID,
+			UserOwner: infoToken.UserID,
+			Code:      listCode[i],
+			IsUsed:    false,
+			Price:     infoCoupon.PriceCoupon,
+		})
 	}
 
-	return listCode, nil
+	return allCoupons, nil
 }
 
-func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []string, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*domain.Coupon, error) {
+func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []mongodb_model.CodeCoupon, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*domain.Coupon, error) {
 
 	collection := m.Database.Collection(collectionName)
 
@@ -202,10 +215,8 @@ func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []st
 
 	for j := 0; j < len(coupons); j++ {
 		couponMetaData = append(couponMetaData, mongodb_model.CouponMetaData{
-			Code:     coupons[j],
+			Code:     coupons[j].ID,
 			ExpireAt: time.Now().AddDate(0, 0, 30),
-			IsUsed:   false,
-			Price:    infoDomainCoupon.PriceCoupon,
 		})
 	}
 
