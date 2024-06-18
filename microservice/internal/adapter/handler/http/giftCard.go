@@ -34,3 +34,20 @@ func (gc *GiftCardHandler) CreateGiftCardHTTP(ctx *gin.Context) {
 
 	handleSuccess(ctx, output)
 }
+
+func (gc *GiftCardHandler) InsertCodeHTTP(ctx *gin.Context) {
+	var req request.InsertCodeRequest
+	if err := ctx.ShouldBindJSON(req); err != nil {
+		handleError(ctx, domain.ErrInternal)
+		return
+	}
+
+	res, err := gc.svc.InsertCodeService(req)
+	if err != nil {
+		handleError(ctx, err)
+		return
+	}
+
+	handleSuccess(ctx, res)
+
+}

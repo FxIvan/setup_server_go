@@ -91,3 +91,8 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 
 	return res, nil
 }
+
+func (gc *GiftCardService) InsertCodeService(body request.InsertCodeRequest) (string, error) {
+	
+	return "", nil
+}

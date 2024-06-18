@@ -2,16 +2,13 @@ package mongodb_model
 
 import (
 	"time"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type BeneficiaryUserInfo struct {
-	ID     primitive.ObjectID `bson:"userBeneficiaryID"`
-	Name   string             `bson:"name"`
-	Code   int                `bson:"code"`
-	Mobile int                `bson:"mobile"`
-	Email  string             `bson:"email"`
+	Name   string `bson:"name"`
+	Code   string `bson:"code"`
+	Mobile string `bson:"mobile"`
+	Email  string `bson:"email"`
 }
 
 type LinkPaymentInfo struct {
@@ -52,5 +49,5 @@ type CouponModel struct {
 }
 
 type CodeCoupon struct {
-	Code string
+	Code string 
 }

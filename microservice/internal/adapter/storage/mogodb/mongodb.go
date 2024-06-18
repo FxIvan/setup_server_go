@@ -284,3 +284,5 @@ func (m *MongoDB) UpdateStatusUalaStorage(collectionName string, idReference str
 
 	return nil
 }
+
+func (m *MongoDB) SearchCode(collectionName string, idReference string, status string) {}

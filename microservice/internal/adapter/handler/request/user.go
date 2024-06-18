@@ -18,3 +18,14 @@ type CreateGiftCardRequest struct {
 	AmountCoupons int    `json:"amount" binding:"required"`
 	PriceCoupons  int    `json:"price" binding:"required"`
 }
+
+type InsertCodeRequest struct {
+	Code   string `json:"code" binding:"required"`
+	Email  string `json:"email" binding:"required"`
+	Mobile string `json:"mobile" binding:"required"`
+	Name   string `json:"name" binding:"required"`
+	CVU    string `json:"cvu"`
+	Alias  string `json:"alias"`
+	Wallet string `json:"wallet"`
+	Red    string `json:"red"`
+}
