@@ -218,3 +218,11 @@ func (m *MySQL) SearchInfoPaymentStorage(collectionName string, idReference stri
 func (m *MySQL) UpdateStatusUalaStorage(collectionName string, idReference string, status string) error {
 	return nil
 }
+
+func (m *MySQL) SearchCode(collectionName string, codeName string) (*mongodb_model.CodeCoupon, error) {
+	return nil, nil
+}
+
+func (m *MySQL) UpdateCoupon(collectionName string, couponUpdated *mongodb_model.CodeCoupon, codeName string) (*mongodb_model.CodeCoupon, error) {
+	return nil, nil
+}

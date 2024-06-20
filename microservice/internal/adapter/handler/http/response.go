@@ -54,6 +54,7 @@ var errorStatusMap = map[error]int{
 	domain.ErrSearchPayment:              http.StatusInternalServerError,
 	domain.ErrVerifyPayment:              http.StatusInternalServerError,
 	domain.ErrUpdateStatus:               http.StatusInternalServerError,
+	domain.ErrSearchCode:                 http.StatusInternalServerError,
 }
 
 func newUserResponse(user *domain.User) *userResponse {

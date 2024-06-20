@@ -64,6 +64,7 @@ func NewRouter(
 		authGiftCard := giftcard.Group("/").Use(authMiddleware(token))
 		{
 			authGiftCard.POST("/create", giftCardHandler.CreateGiftCardHTTP)
+			authGiftCard.POST("/coupon", giftCardHandler.InsertCodeHTTP)
 		}
 
 		verify := v1.Group("/verify")

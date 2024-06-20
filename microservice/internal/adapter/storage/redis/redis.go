@@ -66,3 +66,11 @@ func (m *Redis) SearchInfoPaymentStorage(collectionName string, idReference stri
 func (m *Redis) UpdateStatusUalaStorage(collectionName string, idReference string, status string) error {
 	return nil
 }
+
+func (m *Redis) SearchCode(collectionName string, codeName string) (*mongodb_model.CodeCoupon, error) {
+	return nil, nil
+}
+
+func (m *Redis) UpdateCoupon(collectionName string, couponUpdated *mongodb_model.CodeCoupon, codeName string) (*mongodb_model.CodeCoupon, error) {
+	return nil, nil
+}

@@ -296,4 +296,48 @@ func (m *MongoDB) UpdateStatusUalaStorage(collectionName string, idReference str
 	return nil
 }
 
-func (m *MongoDB) SearchCode(collectionName string, idReference string, status string) {}
+func (m *MongoDB) SearchCode(collectionName string, codeName string) (*mongodbModel.CodeCoupon, error) {
+	var codeCoupon mongodbModel.CodeCoupon
+
+	collection := m.Database.Collection(collectionName)
+
+	filter := bson.D{{"code", codeName}}
+
+	err := collection.FindOne(context.Background(), filter).Decode(&codeCoupon)
+	if err != nil {
+		m.log.ErrorLog.Println(err)
+		return &codeCoupon, err
+	}
+
+	return &codeCoupon, nil
+
+}
+
+func (m *MongoDB) UpdateCoupon(collectionName string, couponUpdated *mongodbModel.CodeCoupon, codeName string) (*mongodb_model.CodeCoupon, error) {
+	filter := bson.D{{"code", codeName}}
+	collection := m.Database.Collection(collectionName)
+	var couponModel mongodb_model.CodeCoupon
+	updated := bson.D{
+		{"$set", bson.D{
+			{"isUsed", couponUpdated.IsUsed},
+			{"cvu", couponUpdated.CVU},
+			{"alias", couponUpdated.Alias},
+		}},
+	}
+	_, err := collection.UpdateOne(context.Background(), filter, updated)
+
+	if err != nil {
+		m.log.ErrorLog.Println(err)
+		return nil, err
+	}
+
+	err = collection.FindOne(context.Background(), filter).Decode(&couponModel)
+
+	if err != nil {
+		m.log.ErrorLog.Println(err)
+		return nil, err
+	}
+
+	return &couponModel, nil
+
+}

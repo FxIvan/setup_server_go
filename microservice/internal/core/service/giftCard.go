@@ -6,6 +6,7 @@ import (
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/config"
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/request"
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/response"
+	mongodb_model "github.com/fxivan/set_up_server/microservice/internal/adapter/storage/mogodb/model"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/fxivan/set_up_server/microservice/internal/core/port"
 	"github.com/fxivan/set_up_server/microservice/internal/core/util"
@@ -93,6 +94,26 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 }
 
 func (gc *GiftCardService) InsertCodeService(body request.InsertCodeRequest) (string, error) {
+
+	_, err := gc.repo.SearchCode("coupons", body.Code)
+	if err != nil {
+		return "", domain.ErrSearchCode
+	}
+	//fmt.Print("couponInfo --->", couponInfo)
+
+	couponToUpdated := &mongodb_model.CodeCoupon{
+		IsUsed: true,
+		CVU:    body.CVU,
+		Alias:  body.Alias,
+		Wallet: body.Wallet,
+		Red:    body.Red,
+	}
+
+	couponUpdated, err := gc.repo.UpdateCoupon("coupons", couponToUpdated, body.Code)
+	if err != nil {
+		return "", domain.ErrSearchCode
+	}
+	fmt.Print("couponUpdated --->", couponUpdated)
 
 	return "", nil
 }

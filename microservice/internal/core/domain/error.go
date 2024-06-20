@@ -53,4 +53,6 @@ var (
 	ErrVerifyPayment = errors.New("error verifying the payment")
 	//ErrUpdateStatusUala an error updating the status of the payment
 	ErrUpdateStatus = errors.New("error updating the status of the payment")
+	//ErrSearchCode code not found
+	ErrSearchCode = errors.New("code not found")
 )
