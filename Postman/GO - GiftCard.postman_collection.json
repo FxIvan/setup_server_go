@@ -1,0 +1,160 @@
+{
+	"info": {
+		"_postman_id": "80409a92-3374-4fbf-962c-8df8d04b98a3",
+		"name": "GO | GiftCard",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "26898025"
+	},
+	"item": [
+		{
+			"name": "/v1/giftcard/create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{JWT}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\":\"Cupon 1500\",\r\n    \"description\":\"Cupon de 1500 ARS\",\r\n    \"amount\":2,\r\n    \"price\":1500\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/v1/giftcard/create"
+			},
+			"response": []
+		},
+		{
+			"name": "/v1/user/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    //\"email\":\"jhon@gmail.com\",\r\n    \"email\":\"ivan@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/v1/user/login"
+			},
+			"response": []
+		},
+		{
+			"name": "/v1/giftcard/verify-coupon",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{JWT}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"code\":\"KjxM8kzj\",\r\n    \"email\":\"almendra@gmail.com\",\r\n    \"mobile\":\"1136887781\",\r\n    \"name\":\"Ivan\",\r\n    \"cvu\":\"005855155596652017412\",\r\n    \"alias\":\"almendra.mp\",\r\n    \"wallet\":\"0x12dq5we6sa1d59w655125w1\",\r\n    \"red\":\"ether\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/v1/giftcard/verify-coupon"
+			},
+			"response": []
+		},
+		{
+			"name": "/v1/verify/payment/uala",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{JWT}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/v1/verify/payment/uala?uuid=9f0fbd80-d793-436c-879d-4a35582837c8&status=success",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"verify",
+						"payment",
+						"uala"
+					],
+					"query": [
+						{
+							"key": "uuid",
+							"value": "9f0fbd80-d793-436c-879d-4a35582837c8"
+						},
+						{
+							"key": "status",
+							"value": "success"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/v1/user/info/:id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{JWT}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "{{url}}/v1/user/info/665a0dc83a734e016a90b7ef"
+			},
+			"response": []
+		},
+		{
+			"name": "/v1/user/all",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{JWT}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "{{url}}/v1/user/all"
+			},
+			"response": []
+		},
+		{
+			"name": "/v1/user/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ivan Lopez\",\r\n  \"email\": \"ivan@gmail.com\",\r\n  \"password\": \"1234\",\r\n  \"role\": \"admin\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/v1/user/register"
+			},
+			"response": []
+		}
+	]
+}

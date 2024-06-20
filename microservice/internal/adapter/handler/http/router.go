@@ -51,11 +51,11 @@ func NewRouter(
 		authUser := user.Group("/").Use(authMiddleware(token))
 		{
 			//Listado para los usuario con token sin admin
-			authUser.GET("/:id", userHandler.GetUserHTTP)
+			authUser.GET("/info/:id", userHandler.GetUserHTTP)
 			admin := authUser.Use(adminAuthMiddleware())
 			{
 				//Listado para usuarios admin nomas
-				admin.GET("/", userHandler.ListUserHTTP)
+				admin.GET("/all", userHandler.ListUserHTTP)
 			}
 		}
 
@@ -64,7 +64,7 @@ func NewRouter(
 		authGiftCard := giftcard.Group("/").Use(authMiddleware(token))
 		{
 			authGiftCard.POST("/create", giftCardHandler.CreateGiftCardHTTP)
-			authGiftCard.POST("/coupon", giftCardHandler.InsertCodeHTTP)
+			authGiftCard.POST("/verify-coupon", giftCardHandler.InsertCodeHTTP)
 		}
 
 		verify := v1.Group("/verify")
