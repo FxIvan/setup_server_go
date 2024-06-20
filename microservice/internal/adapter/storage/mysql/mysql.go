@@ -219,10 +219,10 @@ func (m *MySQL) UpdateStatusUalaStorage(collectionName string, idReference strin
 	return nil
 }
 
-func (m *MySQL) SearchCode(collectionName string, codeName string) (*mongodb_model.CodeCoupon, error) {
+func (m *MySQL) SearchCodeStorage(collectionName string, codeName string) (*mongodb_model.CodeCoupon, error) {
 	return nil, nil
 }
 
-func (m *MySQL) UpdateCoupon(collectionName string, couponUpdated *mongodb_model.CodeCoupon, codeName string) (*mongodb_model.CodeCoupon, error) {
+func (m *MySQL) UpdateCouponStorage(collectionName string, couponUpdated *mongodb_model.CodeCoupon, codeName string) (*mongodb_model.CodeCoupon, error) {
 	return nil, nil
 }

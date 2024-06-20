@@ -14,8 +14,8 @@ type RepoService interface {
 	//GiftCard
 	CreateNumberGiftCardStorage(amount int, collectionName string, infoToken *domain.TokenPayload, infoCoupon *domain.Coupon) ([]mongodb_model.CodeCoupon, error)
 	LinkingGiftCardUserStorage(collectionName string, coupons []mongodb_model.CodeCoupon, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*domain.Coupon, error)
-	SearchCode(collectionName string, codeName string) (*mongodb_model.CodeCoupon, error)
-	UpdateCoupon(collectionName string, couponUpdated *mongodb_model.CodeCoupon, codeName string) (*mongodb_model.CodeCoupon, error)
+	SearchCodeStorage(collectionName string, codeName string) (*mongodb_model.CodeCoupon, error)
+	UpdateCouponStorage(collectionName string, couponUpdated *mongodb_model.CodeCoupon, codeName string) (*mongodb_model.CodeCoupon, error)
 	//Payment
 	SearchInfoPaymentStorage(collectionName string, idReference string) (*mongodb_model.CouponModel, error)
 	UpdateStatusUalaStorage(collectionName string, idReference string, status string) error

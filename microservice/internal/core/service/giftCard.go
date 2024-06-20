@@ -95,11 +95,10 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 
 func (gc *GiftCardService) InsertCodeService(body request.InsertCodeRequest) (string, error) {
 
-	_, err := gc.repo.SearchCode("coupons", body.Code)
+	_, err := gc.repo.SearchCodeStorage("coupons", body.Code)
 	if err != nil {
 		return "", domain.ErrSearchCode
 	}
-	//fmt.Print("couponInfo --->", couponInfo)
 
 	couponToUpdated := &mongodb_model.CodeCoupon{
 		IsUsed: true,
@@ -109,7 +108,7 @@ func (gc *GiftCardService) InsertCodeService(body request.InsertCodeRequest) (st
 		Red:    body.Red,
 	}
 
-	couponUpdated, err := gc.repo.UpdateCoupon("coupons", couponToUpdated, body.Code)
+	couponUpdated, err := gc.repo.UpdateCouponStorage("coupons", couponToUpdated, body.Code)
 	if err != nil {
 		return "", domain.ErrSearchCode
 	}
