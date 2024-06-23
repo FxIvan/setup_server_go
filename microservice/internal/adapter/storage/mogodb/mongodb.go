@@ -126,7 +126,6 @@ func (m *MongoDB) ListUsersStorage(collectionName string) ([]domain.User, error)
 	}
 
 	return listUserAll, nil
-
 }
 
 func (m *MongoDB) GetUserStorage(idUser string, collectionName string) (*domain.User, error) {
@@ -182,11 +181,12 @@ func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string,
 		}
 
 		codeOne := &mongodbModel.CodeCoupon{
-			ID:        primitive.NewObjectID(),
-			UserOwner: infoToken.UserID,
-			Code:      listCode[i],
-			IsUsed:    false,
-			Price:     infoCoupon.PriceCoupon,
+			ID:                primitive.NewObjectID(),
+			UserOwner:         infoToken.UserID,
+			Code:              listCode[i],
+			IsUsed:            false,
+			Price:             infoCoupon.PriceCoupon,
+			IDReferentProcess: infoCoupon.IDReference,
 		}
 
 		_, err = collection.InsertOne(context.Background(), codeOne)
@@ -215,8 +215,8 @@ func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []mo
 
 	for j := 0; j < len(coupons); j++ {
 		couponMetaData = append(couponMetaData, mongodb_model.CouponMetaData{
-			Code:     coupons[j].ID,
-			ExpireAt: time.Now().AddDate(0, 0, 30),
+			Code:   coupons[j].ID,
+			IdLink: infoDomainCoupon.IDReference,
 		})
 	}
 
@@ -310,7 +310,6 @@ func (m *MongoDB) SearchCodeStorage(collectionName string, codeName string) (*mo
 	}
 
 	return &codeCoupon, nil
-
 }
 
 func (m *MongoDB) UpdateCouponStorage(collectionName string, couponUpdated *mongodbModel.CodeCoupon, codeName string) (*mongodb_model.CodeCoupon, error) {
@@ -339,5 +338,17 @@ func (m *MongoDB) UpdateCouponStorage(collectionName string, couponUpdated *mong
 	}
 
 	return &couponModel, nil
+}
 
+func (m *MongoDB) SearchCouponsAllUser(collectionName string, idReference string) (*mongodb_model.CouponModel, error) {
+	var couponModel mongodb_model.CouponModel
+	collection := m.Database.Collection(collectionName)
+	filter := bson.D{{"idDReferentProcess", idReference}}
+	err := collection.FindOne(context.Background(), filter).Decode(&couponModel)
+	if err != nil {
+		m.log.ErrorLog.Println(err)
+		return nil, err
+	}
+
+	return &couponModel, nil
 }

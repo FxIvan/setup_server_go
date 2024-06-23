@@ -226,3 +226,7 @@ func (m *MySQL) SearchCodeStorage(collectionName string, codeName string) (*mong
 func (m *MySQL) UpdateCouponStorage(collectionName string, couponUpdated *mongodb_model.CodeCoupon, codeName string) (*mongodb_model.CodeCoupon, error) {
 	return nil, nil
 }
+
+func (m *MySQL) SearchCouponsAllUser(collectionName string, idReference string) (*mongodb_model.CouponModel, error) {
+	return nil, nil
+}

@@ -93,11 +93,21 @@ func (gc *GiftCardService) CreateGiftCardService(body request.CreateGiftCardRequ
 	return res, nil
 }
 
-func (gc *GiftCardService) InsertCodeService(body request.InsertCodeRequest) (string, error) {
+func (gc *GiftCardService) InsertCodeService(body request.InsertCodeRequest) (*mongodb_model.CodeCoupon, error) {
 
-	_, err := gc.repo.SearchCodeStorage("coupons", body.Code)
+	couponModel, err := gc.repo.SearchCodeStorage("coupons", body.Code)
 	if err != nil {
-		return "", domain.ErrSearchCode
+		return nil, domain.ErrSearchCode
+	}
+
+	userAndCoupons, err := gc.repo.SearchCouponsAllUser("couponsalluser", couponModel.IDReferentProcess)
+	if err != nil {
+		return nil, domain.ErrSearchCode
+	}
+
+	isAPPROVED := userAndCoupons.InfoPayment.Status
+	if isAPPROVED != "APPROVED" {
+		return nil, domain.ErrBottomlessCoupon
 	}
 
 	couponToUpdated := &mongodb_model.CodeCoupon{
@@ -110,9 +120,8 @@ func (gc *GiftCardService) InsertCodeService(body request.InsertCodeRequest) (st
 
 	couponUpdated, err := gc.repo.UpdateCouponStorage("coupons", couponToUpdated, body.Code)
 	if err != nil {
-		return "", domain.ErrSearchCode
+		return nil, domain.ErrSearchCode
 	}
-	fmt.Print("couponUpdated --->", couponUpdated)
 
-	return "", nil
+	return couponUpdated, nil
 }

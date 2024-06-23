@@ -55,4 +55,6 @@ var (
 	ErrUpdateStatus = errors.New("error updating the status of the payment")
 	//ErrSearchCode code not found
 	ErrSearchCode = errors.New("code not found")
+	// ErrBottomlessCoupon is an error when the coupon is not found
+	ErrBottomlessCoupon = errors.New("bottomless coupon")
 )

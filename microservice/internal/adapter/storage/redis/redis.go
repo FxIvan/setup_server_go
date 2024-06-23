@@ -74,3 +74,7 @@ func (m *Redis) SearchCodeStorage(collectionName string, codeName string) (*mong
 func (m *Redis) UpdateCouponStorage(collectionName string, couponUpdated *mongodb_model.CodeCoupon, codeName string) (*mongodb_model.CodeCoupon, error) {
 	return nil, nil
 }
+
+func (m *Redis) SearchCouponsAllUser(collectionName string, idReference string) (*mongodb_model.CouponModel, error) {
+	return nil, nil
+}

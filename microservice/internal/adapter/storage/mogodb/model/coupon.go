@@ -1,8 +1,6 @@
 package mongodb_model
 
 import (
-	"time"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -27,9 +25,8 @@ type LinkPaymentInfo struct {
 }
 
 type CouponMetaData struct {
-	Code            primitive.ObjectID  `bson:"_id"`
-	ExpireAt        time.Time           `bson:"expireat"`
-	BeneficiaryUser BeneficiaryUserInfo `bson:"beneficiaryuser"`
+	Code   primitive.ObjectID `bson:"_id"`
+	IdLink string             `bson:"IdLink"`
 }
 
 type CouponModel struct {
@@ -45,14 +42,15 @@ type CouponModel struct {
 }
 
 type CodeCoupon struct {
-	ID              primitive.ObjectID `bson:"_id"`
-	UserOwner       string             `bson:"userOwner"`
-	Code            string             `bson:"code"`
-	BeneficiaryUser string             `bson:"beneficiaryUser"`
-	IsUsed          bool               `bson:"isUsed"`
-	Price           int                `bson:"price"`
-	CVU             string             `bson:"cvu"`
-	Alias           string             `bson:"alias"`
-	Wallet          string             `bson:"wallet"`
-	Red             string             `bson:"red"`
+	ID                primitive.ObjectID `bson:"_id"`
+	IDReferentProcess string             `bson:"idDReferentProcess"`
+	UserOwner         string             `bson:"userOwner"`
+	Code              string             `bson:"code"`
+	BeneficiaryUser   string             `bson:"beneficiaryUser"`
+	IsUsed            bool               `bson:"isUsed"`
+	Price             int                `bson:"price"`
+	CVU               string             `bson:"cvu"`
+	Alias             string             `bson:"alias"`
+	Wallet            string             `bson:"wallet"`
+	Red               string             `bson:"red"`
 }
