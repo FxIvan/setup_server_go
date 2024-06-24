@@ -63,13 +63,22 @@ func NewRouter(
 
 		authGiftCard := giftcard.Group("/").Use(authMiddleware(token))
 		{
-			authGiftCard.POST("/create", giftCardHandler.CreateGiftCardHTTP)
+			authGiftCard.POST("/create", giftCardHandler.CreateGiftCardAuthHTTP)
 			authGiftCard.POST("/verify-coupon", giftCardHandler.SearchCodeHTTP)
 		}
 
 		verify := v1.Group("/verify")
 		{
 			verify.GET("/payment/uala", verifyPaymentHandler.VerifyPaymentHTTP)
+		}
+	}
+
+	v2 := router.Group("/v2")
+	{
+		pbcGiftcard := v2.Group("/giftcard")
+		{
+			pbcGiftcard.POST("/create", giftCardHandler.CreateGiftCardPublicHTTP)
+			pbcGiftcard.POST("/verify-coupon", giftCardHandler.SearchCodeHTTP)
 		}
 	}
 

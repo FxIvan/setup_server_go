@@ -2,6 +2,7 @@ package domain
 
 type Coupon struct {
 	IDReference   string
+	Email         string
 	Owner         string
 	Title         string
 	Description   string

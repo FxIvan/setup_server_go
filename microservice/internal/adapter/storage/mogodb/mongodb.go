@@ -222,6 +222,7 @@ func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []mo
 
 	modelCoupon := &mongodb_model.CouponModel{
 		IDReferentProcess: infoDomainCoupon.IDReference,
+		Email:             infoDomainCoupon.Email,
 		Owner:             infoDomainCoupon.Owner,
 		Title:             infoDomainCoupon.Title,
 		Description:       infoDomainCoupon.Description,
@@ -321,6 +322,8 @@ func (m *MongoDB) UpdateCouponStorage(collectionName string, couponUpdated *mong
 			{"isUsed", couponUpdated.IsUsed},
 			{"cvu", couponUpdated.CVU},
 			{"alias", couponUpdated.Alias},
+			{"wallet", couponUpdated.Wallet},
+			{"red", couponUpdated.Red},
 		}},
 	}
 	_, err := collection.UpdateOne(context.Background(), filter, updated)

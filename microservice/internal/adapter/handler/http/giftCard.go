@@ -17,7 +17,7 @@ func NewGiftCardHandler(svc *service.GiftCardService) *GiftCardHandler {
 	}
 }
 
-func (gc *GiftCardHandler) CreateGiftCardHTTP(ctx *gin.Context) {
+func (gc *GiftCardHandler) CreateGiftCardAuthHTTP(ctx *gin.Context) {
 	var req request.CreateGiftCardRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		handleError(ctx, domain.ErrInternal)
@@ -25,7 +25,23 @@ func (gc *GiftCardHandler) CreateGiftCardHTTP(ctx *gin.Context) {
 	}
 	payload := getAuthPayload(ctx, authorizationPayloadKey)
 
-	output, err := gc.svc.CreateGiftCardService(req, payload)
+	output, err := gc.svc.CreateGiftCardAuthService(req, payload)
+
+	if err != nil {
+		handleError(ctx, err)
+		return
+	}
+
+	handleSuccess(ctx, output)
+}
+
+func (gc *GiftCardHandler) CreateGiftCardPublicHTTP(ctx *gin.Context) {
+	var req request.CreateGiftCardRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		handleError(ctx, domain.ErrInternal)
+		return
+	}
+	output, err := gc.svc.GetGiftCardServicePublic(req)
 
 	if err != nil {
 		handleError(ctx, err)

@@ -31,6 +31,7 @@ type CouponMetaData struct {
 
 type CouponModel struct {
 	IDReferentProcess string           `bson:"idDReferentProcess"`
+	Email             string           `bson:"email"`
 	Owner             string           `bson:"idOwner"`
 	Title             string           `bson:"title"`
 	Description       string           `bson:"description"`
