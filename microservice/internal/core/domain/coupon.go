@@ -7,8 +7,8 @@ type Coupon struct {
 	Title         string
 	Description   string
 	AmountCoupons int
-	PriceCoupon   int
-	Total         int
+	PriceCoupon   float64
+	Total         float64
 }
 
 type ResLinks struct {

@@ -28,7 +28,7 @@ func NewGiftCardService(configEnv *config.URLMicroservice, repo port.RepoService
 
 func (gc *GiftCardService) CreateGiftCardAuthService(body request.CreateGiftCardRequest, infoToken *domain.TokenPayload) (*response.ResCreatedGiftCard, error) {
 
-	total := body.AmountCoupons * body.PriceCoupons
+	total := float64(body.AmountCoupons) * body.PriceCoupons
 
 	coupon := &domain.Coupon{
 		IDReference:   util.GenerateUUIDUnique(),
@@ -94,7 +94,14 @@ func (gc *GiftCardService) CreateGiftCardAuthService(body request.CreateGiftCard
 }
 
 func (gc *GiftCardService) GetGiftCardServicePublic(body request.CreateGiftCardRequest) (*response.ResCreatedGiftCard, error) {
-	total := body.AmountCoupons * body.PriceCoupons
+	total := float64(body.AmountCoupons) * body.PriceCoupons
+
+	//Precio dolar
+	resp, err := util.GetPriceDolar("https://dolarapi.com/v1/dolares/tarjeta")
+	if err != nil {
+		gc.log.ErrorLog.Println(err)
+		return nil, domain.ErrGetPriceDolar
+	}
 
 	coupon := &domain.Coupon{
 		IDReference:   util.GenerateUUIDUnique(),
@@ -104,7 +111,7 @@ func (gc *GiftCardService) GetGiftCardServicePublic(body request.CreateGiftCardR
 		Description:   body.Description,
 		AmountCoupons: body.AmountCoupons - 1,
 		PriceCoupon:   body.PriceCoupons,
-		Total:         total,
+		Total:         total * resp.Venta,
 	}
 
 	bodyPost := &request.RequestPaymentMicroservice{
@@ -116,7 +123,7 @@ func (gc *GiftCardService) GetGiftCardServicePublic(body request.CreateGiftCardR
 
 	URLPost := fmt.Sprintf("%s/create/payment", gc.config.HostCreatePaymentNodeJS)
 
-	data, err := util.POSTCreateGiftCardMicroservice(URLPost, "application/json ", bodyPost)
+	data, err := util.POSTCreateGiftCardMicroservice(URLPost, "application/json", bodyPost)
 	if err != nil {
 		gc.log.ErrorLog.Println(err)
 		return nil, domain.ErrCreatedPaymentUala

@@ -35,9 +35,9 @@ type CouponModel struct {
 	Owner             string           `bson:"idOwner"`
 	Title             string           `bson:"title"`
 	Description       string           `bson:"description"`
-	AmountCoupons     string           `bson:"amountCoupons"`
-	PriceCoupon       string           `bson:"priceCoupon"`
-	Total             string           `bson:"total"`
+	AmountCoupons     int              `bson:"amountCoupons"`
+	PriceCoupon       float64          `bson:"priceCoupon"`
+	Total             float64          `bson:"total"`
 	Codes             []CouponMetaData `bson:"codes"`
 	InfoPayment       LinkPaymentInfo  `bson:"infopayment"`
 }
@@ -49,7 +49,7 @@ type CodeCoupon struct {
 	Code              string             `bson:"code"`
 	BeneficiaryUser   string             `bson:"beneficiaryUser"`
 	IsUsed            bool               `bson:"isUsed"`
-	Price             int                `bson:"price"`
+	Price             float64            `bson:"price"`
 	CVU               string             `bson:"cvu"`
 	Alias             string             `bson:"alias"`
 	Wallet            string             `bson:"wallet"`

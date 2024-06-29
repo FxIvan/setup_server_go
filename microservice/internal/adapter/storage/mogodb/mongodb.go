@@ -3,7 +3,6 @@ package mongodb
 import (
 	"context"
 	"fmt"
-	"strconv"
 	"strings"
 	"time"
 
@@ -226,9 +225,9 @@ func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []mo
 		Owner:             infoDomainCoupon.Owner,
 		Title:             infoDomainCoupon.Title,
 		Description:       infoDomainCoupon.Description,
-		AmountCoupons:     strconv.Itoa(infoDomainCoupon.AmountCoupons),
-		PriceCoupon:       strconv.Itoa(infoDomainCoupon.PriceCoupon),
-		Total:             strconv.Itoa(infoDomainCoupon.Total),
+		AmountCoupons:     infoDomainCoupon.AmountCoupons,
+		PriceCoupon:       infoDomainCoupon.PriceCoupon,
+		Total:             infoDomainCoupon.Total,
 		Codes:             couponMetaData,
 		InfoPayment: mongodb_model.LinkPaymentInfo{
 			OrderNumber: infoPayment.OrderNumber,

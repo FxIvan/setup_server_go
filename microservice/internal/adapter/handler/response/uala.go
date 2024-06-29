@@ -14,9 +14,9 @@ type ResVerifyPaymentUala struct {
 }
 
 type ResCreatedGiftCard struct {
-	Title         string `json:"title"`
-	Description   string `json:"description"`
-	AmountCoupons int    `json:"amountCoupons"`
-	PriceCoupon   int    `json:"priceCoupon"`
-	Total         int    `json:"total"`
+	Title         string  `json:"title"`
+	Description   string  `json:"description"`
+	AmountCoupons int     `json:"amountCoupons"`
+	PriceCoupon   float64 `json:"priceCoupon"`
+	Total         float64 `json:"total"`
 }

@@ -57,4 +57,6 @@ var (
 	ErrSearchCode = errors.New("code not found")
 	// ErrBottomlessCoupon is an error when the coupon is not found
 	ErrBottomlessCoupon = errors.New("bottomless coupon")
+	//ErrGetPriceDolar an error when getting the dollar price
+	ErrGetPriceDolar = errors.New("error when getting the dollar price")
 )
