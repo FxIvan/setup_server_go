@@ -1,7 +1,9 @@
-package pasetoKey
+package passetoKey
 
 import (
 	"crypto/ed25519"
+	"crypto/rand"
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 )
@@ -19,6 +21,20 @@ func createPasetoKey() {
 	fmt.Println("Private Key:", privateKeyHex)
 }
 
+func createSecretKeyJWT() {
+
+	key := make([]byte, 32)
+	_, err := rand.Read(key)
+	if err != nil {
+		panic(err)
+	}
+
+	secretKey := base64.StdEncoding.EncodeToString(key)
+	fmt.Println("Secret Key:", secretKey)
+
+}
+
 func main() {
 	createPasetoKey()
+	createSecretKeyJWT()
 }

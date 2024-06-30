@@ -59,4 +59,6 @@ var (
 	ErrBottomlessCoupon = errors.New("bottomless coupon")
 	//ErrGetPriceDolar an error when getting the dollar price
 	ErrGetPriceDolar = errors.New("error when getting the dollar price")
+	//ErrEncryptData an error when encrypting the dollar price
+	ErrEncryptData = errors.New("error when encrypting the dollar price")
 )

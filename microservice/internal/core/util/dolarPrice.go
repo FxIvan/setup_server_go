@@ -5,18 +5,12 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 )
 
-type ReponseDolarPrice struct {
-	Moneda string  `json:"moneda"`
-	Casa   string  `json:"casa"`
-	Nombre string  `json:"nombre"`
-	Compra float64 `json:"compra"`
-	Venta  float64 `json:"venta"`
-}
-
-func GetPriceDolar(url string) (*ReponseDolarPrice, error) {
-	var responseDolar ReponseDolarPrice
+func GetPriceDolar(url string) (*domain.GETPriceDolar, error) {
+	var responseDolar domain.GETPriceDolar
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err

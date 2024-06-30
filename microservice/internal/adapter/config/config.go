@@ -11,6 +11,7 @@ type (
 	Container struct {
 		HTTP            *HTTP
 		Token           *Token
+		JWT             *JWT
 		TerminalLog     *TerminalLog
 		URLMicroservice *URLMicroservice
 	}
@@ -19,6 +20,11 @@ type (
 		PublicKey  string
 		PrivateKey string
 		Duration   string
+	}
+
+	JWT struct {
+		JWT_SCRET string
+		DURATION  string
 	}
 
 	HTTP struct {
@@ -64,6 +70,11 @@ func New() (*Container, error) {
 		InfoLog:  log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
 	}
 
+	jwt := &JWT{
+		JWT_SCRET: os.Getenv("JWT_SECRET"),
+		DURATION:  os.Getenv("JWT_DURATION"),
+	}
+
 	urlMicroservice := &URLMicroservice{
 		HostCreatePaymentNodeJS: os.Getenv("URL_CREATE_PAYMENT_NODEJS"),
 	}
@@ -71,6 +82,7 @@ func New() (*Container, error) {
 	return &Container{
 		http,
 		token,
+		jwt,
 		terminalLog,
 		urlMicroservice,
 	}, nil

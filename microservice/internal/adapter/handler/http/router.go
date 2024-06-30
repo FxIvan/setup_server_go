@@ -23,6 +23,7 @@ func NewRouter(
 	userHandler UserHandler,
 	authHandler AuthHandler,
 	giftCardHandler GiftCardHandler,
+	priceCoinHandler PriceCoinHandler,
 	verifyPaymentHandler VerifyPaymentHandler,
 ) (*Router, error) {
 	if config.Env == "production" {
@@ -79,6 +80,10 @@ func NewRouter(
 		{
 			pbcGiftcard.POST("/create", giftCardHandler.CreateGiftCardPublicHTTP)
 			pbcGiftcard.POST("/verify-coupon", giftCardHandler.SearchCodeHTTP)
+		}
+		pbcPriceCoins := v2.Group("/price")
+		{
+			pbcPriceCoins.GET("/dolar", priceCoinHandler.GetPriceDolarHTTP)
 		}
 	}
 

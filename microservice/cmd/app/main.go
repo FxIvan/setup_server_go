@@ -85,12 +85,17 @@ func main() {
 	verifyPaymentService := service.NewVerifyPaymentService(config.URLMicroservice, repo, config.TerminalLog)
 	verifyPaymentHandler := http.NewVerifyPaymentHandler(verifyPaymentService)
 
+	//PriceCoin
+	priceCoinService := service.NewCoinsPriceService(config, repo, config.TerminalLog)
+	priceCoinHandler := http.NewPriceCoinHandler(priceCoinService)
+
 	router, err := http.NewRouter(
 		config.HTTP,
 		token,
 		*userHandler,
 		*authHandler,
 		*giftCardHandler,
+		*priceCoinHandler,
 		*verifyPaymentHandler,
 	)
 
