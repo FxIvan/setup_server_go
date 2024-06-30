@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
@@ -19,7 +18,8 @@ type EncryptDolarPriceModel struct {
 
 func EncryptDolarPrice(body *domain.GETPriceDolar, secret string) (*domain.GETPriceDolar, error) {
 
-	fmt.Println(body)
+	expireTimeMs := 86400000
+
 	claims := EncryptDolarPriceModel{
 		body.Moneda,
 		body.Casa,
@@ -27,7 +27,7 @@ func EncryptDolarPrice(body *domain.GETPriceDolar, secret string) (*domain.GETPr
 		body.Compra,
 		body.Venta,
 		jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Unix(1516239022, 0)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(expireTimeMs) * time.Millisecond)),
 			Issuer:    "PriceDolar",
 		},
 	}

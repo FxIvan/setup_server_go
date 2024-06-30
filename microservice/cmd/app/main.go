@@ -78,7 +78,7 @@ func main() {
 	authHandler := http.NewAuthHandler(authService)
 
 	//GiftCard
-	giftCardService := service.NewGiftCardService(config.URLMicroservice, repo, config.TerminalLog)
+	giftCardService := service.NewGiftCardService(config.URLMicroservice, repo, config.TerminalLog, config)
 	giftCardHandler := http.NewGiftCardHandler(giftCardService)
 
 	//VerifyPayment

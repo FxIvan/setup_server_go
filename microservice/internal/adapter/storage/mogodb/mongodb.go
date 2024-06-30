@@ -241,6 +241,7 @@ func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []mo
 			SuccessLink: infoPayment.Links.LinkSuccess,
 			FailedLink:  infoPayment.Links.LinkFailed,
 		},
+		CreatedAt: time.Now().String(),
 	}
 
 	_, err := collection.InsertOne(context.Background(), modelCoupon)

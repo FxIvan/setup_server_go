@@ -6,5 +6,5 @@ type GETPriceDolar struct {
 	Nombre    string  `json:"nombre"`
 	Compra    float64 `json:"compra"`
 	Venta     float64 `json:"venta"`
-	JWT_PRICE string
+	JWT_PRICE string  `json:"jwtPrice"`
 }

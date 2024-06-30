@@ -61,4 +61,6 @@ var (
 	ErrGetPriceDolar = errors.New("error when getting the dollar price")
 	//ErrEncryptData an error when encrypting the dollar price
 	ErrEncryptData = errors.New("error when encrypting the dollar price")
+	//ErrDecryptPriceDolar an error when decrypting the dollar price
+	ErrDecryptPriceDolar = errors.New("error when decrypting the dollar price")
 )

@@ -65,5 +65,4 @@ func (gc *GiftCardHandler) SearchCodeHTTP(ctx *gin.Context) {
 	}
 
 	handleSuccess(ctx, res)
-
 }

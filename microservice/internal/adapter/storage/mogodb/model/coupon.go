@@ -40,6 +40,8 @@ type CouponModel struct {
 	Total             float64          `bson:"total"`
 	Codes             []CouponMetaData `bson:"codes"`
 	InfoPayment       LinkPaymentInfo  `bson:"infopayment"`
+	CreatedAt         string           `bson:"createdAt"`
+	UpdatedAt         string           `bson:"updatedAt"`
 }
 
 type CodeCoupon struct {
@@ -54,4 +56,6 @@ type CodeCoupon struct {
 	Alias             string             `bson:"alias"`
 	Wallet            string             `bson:"wallet"`
 	Red               string             `bson:"red"`
+	CreatedAt         string             `bson:"createdAt"`
+	UpdatedAt         string             `bson:"updatedAt"`
 }

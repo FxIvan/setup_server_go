@@ -13,16 +13,18 @@ import (
 )
 
 type GiftCardService struct {
-	repo   port.RepoService
-	log    *config.TerminalLog
-	config *config.URLMicroservice
+	repo            port.RepoService
+	log             *config.TerminalLog
+	config          *config.URLMicroservice
+	configContainer *config.Container
 }
 
-func NewGiftCardService(configEnv *config.URLMicroservice, repo port.RepoService, logTerminal *config.TerminalLog) *GiftCardService {
+func NewGiftCardService(configLog *config.URLMicroservice, repo port.RepoService, logTerminal *config.TerminalLog, configContainer *config.Container) *GiftCardService {
 	return &GiftCardService{
-		repo:   repo,
-		log:    logTerminal,
-		config: configEnv,
+		repo:            repo,
+		log:             logTerminal,
+		config:          configLog,
+		configContainer: configContainer,
 	}
 }
 
@@ -96,11 +98,10 @@ func (gc *GiftCardService) CreateGiftCardAuthService(body request.CreateGiftCard
 func (gc *GiftCardService) GetGiftCardServicePublic(body request.CreateGiftCardRequest) (*response.ResCreatedGiftCard, error) {
 	total := float64(body.AmountCoupons) * body.PriceCoupons
 
-	//Precio dolar
-	resp, err := util.GetPriceDolar("https://dolarapi.com/v1/dolares/tarjeta")
+	priceDolarJWT, err := util.DecryptDolarPrice(body.JWTPriceDolar, gc.configContainer.JWT.JWT_SCRET)
 	if err != nil {
 		gc.log.ErrorLog.Println(err)
-		return nil, domain.ErrGetPriceDolar
+		return nil, domain.ErrDecryptPriceDolar
 	}
 
 	coupon := &domain.Coupon{
@@ -110,8 +111,8 @@ func (gc *GiftCardService) GetGiftCardServicePublic(body request.CreateGiftCardR
 		Title:         body.Title,
 		Description:   body.Description,
 		AmountCoupons: body.AmountCoupons - 1,
-		PriceCoupon:   body.PriceCoupons,
-		Total:         total * resp.Venta,
+		PriceCoupon:   body.PriceCoupons * priceDolarJWT.Venta,
+		Total:         total * priceDolarJWT.Venta,
 	}
 
 	bodyPost := &request.RequestPaymentMicroservice{
