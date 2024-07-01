@@ -23,5 +23,5 @@ func (pc *PriceCoinHandler) GetPriceDolarHTTP(ctx *gin.Context) {
 		return
 	}
 
-	handleSuccess(ctx, output)
+	handleSuccess(ctx, "Precio dolar", output)
 }

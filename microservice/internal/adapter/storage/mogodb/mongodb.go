@@ -206,7 +206,7 @@ func (m *MongoDB) CreateNumberGiftCardStorage(amount int, collectionName string,
 	return allCoupons, nil
 }
 
-func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []mongodb_model.CodeCoupon, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*domain.Coupon, error) {
+func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []mongodb_model.CodeCoupon, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*mongodb_model.CouponModel, error) {
 
 	collection := m.Database.Collection(collectionName)
 
@@ -250,17 +250,7 @@ func (m *MongoDB) LinkingGiftCardUserStorage(collectionName string, coupons []mo
 		return nil, err
 	}
 
-	response := &domain.Coupon{
-		IDReference:   modelCoupon.IDReferentProcess,
-		Owner:         modelCoupon.Owner,
-		Title:         modelCoupon.Title,
-		Description:   modelCoupon.Description,
-		AmountCoupons: infoDomainCoupon.AmountCoupons,
-		PriceCoupon:   infoDomainCoupon.PriceCoupon,
-		Total:         infoDomainCoupon.Total,
-	}
-
-	return response, nil
+	return modelCoupon, nil
 }
 
 func (m *MongoDB) SearchInfoPaymentStorage(collectionName string, idReference string) (*mongodb_model.CouponModel, error) {

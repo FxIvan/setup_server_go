@@ -118,7 +118,7 @@ func handleError(ctx *gin.Context, err error) {
 	ctx.JSON(statusCode, errRsp)
 }
 
-func handleSuccess(ctx *gin.Context, data any) {
-	rsp := newResponse(true, "Success", data)
+func handleSuccess(ctx *gin.Context, message string, data any) {
+	rsp := newResponse(true, message, data)
 	ctx.JSON(http.StatusOK, rsp)
 }

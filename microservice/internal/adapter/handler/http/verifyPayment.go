@@ -23,5 +23,5 @@ func (vp *VerifyPaymentHandler) VerifyPaymentHTTP(ctx *gin.Context) {
 		handleError(ctx, err)
 		return
 	}
-	handleSuccess(ctx, res)
+	handleSuccess(ctx, "Verificando pago correctamente", res)
 }

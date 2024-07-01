@@ -207,7 +207,7 @@ func (m *MySQL) CreateNumberGiftCardStorage(amount int, collectionName string, i
 	return nil, nil
 }
 
-func (m *MySQL) LinkingGiftCardUserStorage(collectionName string, coupons []mongodb_model.CodeCoupon, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*domain.Coupon, error) {
+func (m *MySQL) LinkingGiftCardUserStorage(collectionName string, coupons []mongodb_model.CodeCoupon, infoPayment *domain.ResponseUalabisPOST, infoDomainCoupon *domain.Coupon) (*mongodb_model.CouponModel, error) {
 	return nil, nil
 }
 

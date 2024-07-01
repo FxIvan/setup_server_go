@@ -95,7 +95,7 @@ func (gc *GiftCardService) CreateGiftCardAuthService(body request.CreateGiftCard
 	return res, nil
 }
 
-func (gc *GiftCardService) GetGiftCardServicePublic(body request.CreateGiftCardRequest) (*response.ResCreatedGiftCard, error) {
+func (gc *GiftCardService) GetGiftCardServicePublicService(body request.CreateGiftCardRequest) (*response.ResCreatedGiftCard, error) {
 	total := float64(body.AmountCoupons) * body.PriceCoupons
 
 	priceDolarJWT, err := util.DecryptDolarPrice(body.JWTPriceDolar, gc.configContainer.JWT.JWT_SCRET)
@@ -110,7 +110,7 @@ func (gc *GiftCardService) GetGiftCardServicePublic(body request.CreateGiftCardR
 		Email:         body.Email,
 		Title:         body.Title,
 		Description:   body.Description,
-		AmountCoupons: body.AmountCoupons - 1,
+		AmountCoupons: body.AmountCoupons,
 		PriceCoupon:   body.PriceCoupons * priceDolarJWT.Venta,
 		Total:         total * priceDolarJWT.Venta,
 	}
@@ -134,7 +134,7 @@ func (gc *GiftCardService) GetGiftCardServicePublic(body request.CreateGiftCardR
 		UserID: "PUBLIC",
 	}
 
-	allCode, err := gc.repo.CreateNumberGiftCardStorage(coupon.AmountCoupons, "coupons", infoToken, coupon)
+	allCode, err := gc.repo.CreateNumberGiftCardStorage(coupon.AmountCoupons-1, "coupons", infoToken, coupon)
 	if err != nil {
 		gc.log.ErrorLog.Println(err)
 		return nil, domain.ErrCreatedNumberCoupons
@@ -167,6 +167,7 @@ func (gc *GiftCardService) GetGiftCardServicePublic(body request.CreateGiftCardR
 		AmountCoupons: dataLink.AmountCoupons,
 		PriceCoupon:   dataLink.PriceCoupon,
 		Total:         dataLink.Total,
+		LinkPayment:   dataLink.InfoPayment.Link,
 	}
 
 	return res, nil

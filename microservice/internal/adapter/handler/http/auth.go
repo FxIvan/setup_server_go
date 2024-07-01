@@ -29,5 +29,5 @@ func (au *AuthHandler) LoginUserHTTP(ctx *gin.Context) {
 		return
 
 	}
-	handleSuccess(ctx, token)
+	handleSuccess(ctx, "Login inciado", token)
 }

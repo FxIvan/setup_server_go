@@ -43,7 +43,7 @@ func (uh *UserHandler) RegisterUserHTTP(ctx *gin.Context) {
 		return
 	}
 
-	handleSuccess(ctx, text)
+	handleSuccess(ctx, "Usuario registrado", text)
 }
 
 func (uh *UserHandler) ListUserHTTP(ctx *gin.Context) {
@@ -54,7 +54,7 @@ func (uh *UserHandler) ListUserHTTP(ctx *gin.Context) {
 		return
 	}
 
-	handleSuccess(ctx, listUser)
+	handleSuccess(ctx, "Usuarios", listUser)
 }
 
 func (uh *UserHandler) GetUserHTTP(ctx *gin.Context) {
@@ -66,5 +66,5 @@ func (uh *UserHandler) GetUserHTTP(ctx *gin.Context) {
 		return
 	}
 
-	handleSuccess(ctx, user)
+	handleSuccess(ctx, "User", user)
 }

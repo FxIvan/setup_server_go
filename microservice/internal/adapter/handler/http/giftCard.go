@@ -1,6 +1,8 @@
 package http
 
 import (
+	"fmt"
+
 	"github.com/fxivan/set_up_server/microservice/internal/adapter/handler/request"
 	"github.com/fxivan/set_up_server/microservice/internal/core/domain"
 	"github.com/fxivan/set_up_server/microservice/internal/core/service"
@@ -32,23 +34,24 @@ func (gc *GiftCardHandler) CreateGiftCardAuthHTTP(ctx *gin.Context) {
 		return
 	}
 
-	handleSuccess(ctx, output)
+	handleSuccess(ctx, "Cupon creado correctamente", output)
 }
 
 func (gc *GiftCardHandler) CreateGiftCardPublicHTTP(ctx *gin.Context) {
 	var req request.CreateGiftCardRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
+		fmt.Println(err)
 		handleError(ctx, domain.ErrInternal)
 		return
 	}
-	output, err := gc.svc.GetGiftCardServicePublic(req)
+	output, err := gc.svc.GetGiftCardServicePublicService(req)
 
 	if err != nil {
 		handleError(ctx, err)
 		return
 	}
 
-	handleSuccess(ctx, output)
+	handleSuccess(ctx, "Cupon creado correctamente", output)
 }
 
 func (gc *GiftCardHandler) SearchCodeHTTP(ctx *gin.Context) {
@@ -64,5 +67,5 @@ func (gc *GiftCardHandler) SearchCodeHTTP(ctx *gin.Context) {
 		return
 	}
 
-	handleSuccess(ctx, res)
+	handleSuccess(ctx, "Codigo canjeado", res)
 }

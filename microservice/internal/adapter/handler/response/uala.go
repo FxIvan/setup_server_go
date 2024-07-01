@@ -19,4 +19,5 @@ type ResCreatedGiftCard struct {
 	AmountCoupons int     `json:"amountCoupons"`
 	PriceCoupon   float64 `json:"priceCoupon"`
 	Total         float64 `json:"total"`
+	LinkPayment   string  `json:"linkPayment"`
 }
