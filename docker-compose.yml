@@ -1,10 +1,9 @@
 version: "3.9"
+
 services:
-  app:
+  microservice:
+    build: "./microservice"
     container_name: ${NAME_CONTAINER_ENV}
-    build:
-      context: .
-      dockerfile: Dockerfile
     restart: always
     ports:
       - 4000:4000
@@ -33,9 +32,22 @@ services:
     networks:
       - shared_network
 
+  microservice-payment:
+    build: "./microservice-payment/ualabis"
+    container_name: ${NAME_CONTAINER_PAYMENT_ENV}
+    restart: always
+    ports:
+      - 5000:5000
+    environment:
+      - USER_NAME_UALA=$USER_NAME_UALA
+      - CLIENT_ID_UALA=$CLIENT_ID_UALA
+      - CLIENT_SECRET_ID=$CLIENT_SECRET_ID
+      - PORT=$PORT
+    networks:
+      - shared_network
+
 volumes:
   mongo-data:
 
 networks:
   shared_network:
-    external: true
