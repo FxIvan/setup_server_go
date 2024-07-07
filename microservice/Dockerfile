@@ -1,41 +1,18 @@
-# Imagen base
-FROM golang:1.22-alpine AS builder
-
-# Instala git
-RUN apk add --no-cache git
-
-# Establece el directorio de trabajo
-WORKDIR /app
-
-# Copia los archivos del proyecto
-COPY . .
-
-# Configura Go Modules (si es necesario)
-RUN go mod tidy
-
-# Descarga las dependencias
-RUN go get -d -v ./...
-
-# Compila la aplicación (ajusta la ruta a tu archivo principal)
-RUN go build -o /go/bin/app -v ./cmd/app
-
-# Imagen final
+# Usa una imagen base ligera de Alpine Linux
 FROM alpine:latest
 
-# Establece el directorio de trabajo en la nueva imagen
-WORKDIR /root/
+# Establece el directorio de trabajo dentro del contenedor
+WORKDIR /app
 
-# Copia el binario de la imagen de compilación
-COPY --from=builder /go/bin/app .
+# Copia el archivo ejecutable en el contenedor
+COPY cmd/app/micro-app .
+COPY .env .
 
-# Configura el usuario
-RUN adduser -D -u 1000 appuser
+# Asegura los permisos de ejecución para el binario
+RUN chmod +x micro-app
 
-# Establece el usuario no root
-USER appuser
+# Exponer el puerto que utiliza tu aplicación (si tu aplicación expone algún puerto)
+EXPOSE 4000
 
-# Define el punto de entrada
-#MongoDB
-ENTRYPOINT ["./app", "-enginedb", "mongodb","-hostdb","mongodb-container","-portdb", "27017", "-userdb", "almendra", "-passwordb", "1ASWWWaeq", "-dbname", "microservicio"]
-#MySQL
-#ENTRYPOINT ["./app", "-enginedb", "mysql" ,"-hostdb","micoservice-mysql-microservice-mysql.i.aivencloud.com","-portdb", "11808", "-userdb", "avnadmin", "-passwordb", "AVNS_dezgF0XPVi58xCFBl6b"] 
+# Comando de inicio para ejecutar la aplicación
+CMD ["./micro-app", "-enginedb", "mongodb", "-hostdb", "mongodb-container", "-portdb", "27017", "-userdb", "almendra", "-passwordb", "1ASWWWaeq", "-dbname", "microservicio"]

@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  app:
+  microservice-main:
     container_name: ${NAME_CONTAINER_ENV}
     build:
       context: .
