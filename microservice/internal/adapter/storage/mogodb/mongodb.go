@@ -35,9 +35,8 @@ type User struct {
 }
 
 func New(config *configuration.Configuration, logTerminal *config.TerminalLog) (*MongoDB, error) {
-
-	connectionString := fmt.Sprintf("mongodb://%s:%s@%s:%d/%s?authSource=admin", config.User, config.Password, config.Host, config.Port, config.DBName)
-	clientOptions := options.Client().ApplyURI(connectionString).SetAuth(options.Credential{
+	connectionString := fmt.Sprintf("mongodb+srv://%s:%s@%s/%s?retryWrites=true&w=majority&appName=coupons", config.User, config.Password, config.Host, config.DBName)
+	clientOptions := options.Client().ApplyURI(connectionString).SetAuth(options.Credential{ //
 		Username: config.User,
 		Password: config.Password,
 	})

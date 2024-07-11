@@ -15,4 +15,4 @@ RUN chmod +x micro-app
 EXPOSE 4000
 
 # Comando de inicio para ejecutar la aplicación
-CMD ["./micro-app", "-enginedb", "mongodb", "-hostdb", "mongodb-container", "-portdb", "27017", "-userdb", "almendra", "-passwordb", "1ASWWWaeq", "-dbname", "microservicio"]
+CMD ["./micro-app", "-enginedb", "mongodb", "-hostdb", "coupons.ntfupx3.mongodb.net", "-portdb", "27017", "-userdb", "almendra", "-passwordb", "UBqD7scQr5vheFiU", "-dbname", "microservicio"]

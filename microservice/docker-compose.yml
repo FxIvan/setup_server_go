@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  microservice-main:
+  main:
     container_name: ${NAME_CONTAINER_ENV}
     build:
       context: .
@@ -19,22 +19,6 @@ services:
       URL_CREATE_PAYMENT_NODEJS: ${URL_CREATE_PAYMENT_NODEJS}
     networks:
       - shared_network
-
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb-container
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-    networks:
-      - shared_network
-
-volumes:
-  mongo-data:
 
 networks:
   shared_network:

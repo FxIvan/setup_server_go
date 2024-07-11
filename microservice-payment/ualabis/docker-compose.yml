@@ -1,8 +1,8 @@
 version: "3.9"
 
 services:
-  nodejs-ualabis:
-    container_name: microservice-ualabis
+  ualabis:
+    container_name: ualabis
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,10 +10,10 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      - USER_NAME_UALA=$USER_NAME_UALA
-      - CLIENT_ID_UALA=$CLIENT_ID_UALA
-      - CLIENT_SECRET_ID=$CLIENT_SECRET_ID
-      - PORT=$PORT
+      - USER_NAME_UALA=${USER_NAME_UALA}
+      - CLIENT_ID_UALA=${CLIENT_ID_UALA}
+      - CLIENT_SECRET_ID=${CLIENT_SECRET_ID}
+      - PORT=${PORT}
     ports:
       - "5000:5000"
     networks:

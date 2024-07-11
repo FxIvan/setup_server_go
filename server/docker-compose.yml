@@ -1,15 +1,16 @@
 version: "3.9"
 
 services:
-  microservice-coupon:
-    image: almendraivan/microservice-coupon:${VERSION_IMAGE:-latest}
+  coupon:
+    image: almendraivan/microservice-coupon:v25
     ports:
       - "4000:4000"
     networks:
       - shared_network
 
-  microservice-uala:
-    image: almendraivan/microservice-uala:${VERSION_IMAGE:-latest}
+  uala:
+    image: almendraivan/microservice-uala:v10
+    container_name: uala
     ports:
       - "5000:5000"
     volumes:
@@ -17,21 +18,12 @@ services:
     networks:
       - shared_network
 
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb-container
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+  frontend:
+    image: almendraivan/microservice-frontend:v1
     ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
+      - "3000:3000"
     networks:
       - shared_network
-
-volumes:
-  mongo-data:
 
 networks:
   shared_network:
