@@ -24,7 +24,9 @@ func NewVerifyPaymentService(config *config.URLMicroservice, db port.RepoService
 }
 
 func (vp *VerifyPaymentService) UalaVerifyPaymentService(uuid string, statusPayment string) (string, error) {
-
+	fmt.Println("UalaVerifyPaymentService")
+	fmt.Println("uuid", uuid)
+	fmt.Println("statusPayment", statusPayment)
 	infoPaymentDB, err := vp.repo.SearchInfoPaymentStorage("couponsalluser", uuid)
 
 	if err != nil {

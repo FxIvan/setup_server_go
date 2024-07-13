@@ -6,7 +6,7 @@ const setUpUala = async () => {
     userName: process.env.USER_NAME_UALA,
     clientId: process.env.CLIENT_ID_UALA,
     clientSecret: process.env.CLIENT_SECRET_ID,
-    isDev: true,
+    isDev: false,
   })
 }
 
@@ -23,6 +23,7 @@ const CreatePayment = async (req, res) => {
     console.log("Description: ", description)
     console.log("Success Response: ", succesResponse)
     console.log("Failed Response: ", failedResponse)
+    console.log("User Name UALA: ", process.env.USER_NAME_UALA)
 
     const order = await UalaApiCheckout.createOrder({
       amount: amount,
