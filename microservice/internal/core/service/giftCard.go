@@ -45,8 +45,8 @@ func (gc *GiftCardService) CreateGiftCardAuthService(body request.CreateGiftCard
 	bodyPost := &request.RequestPaymentMicroservice{
 		Amount:         coupon.Total,
 		Description:    coupon.Description,
-		SuccesResponse: fmt.Sprintf("https://api.tech/v1/verify/payment/uala?uuid=%s&status=success", coupon.IDReference),
-		FailedResponse: fmt.Sprintf("https://api.tech/v1/verify/payment/uala?uuid=%s&status=failed", coupon.IDReference),
+		SuccesResponse: fmt.Sprintf("https://app.argcoupon.xyz/v1/verify/payment/uala?uuid=%s&status=success", coupon.IDReference), //
+		FailedResponse: fmt.Sprintf("https://app.argcoupon.xyz/v1/verify/payment/uala?uuid=%s&status=failed", coupon.IDReference),
 	}
 
 	URLPost := fmt.Sprintf("%s/create/payment", gc.config.HostCreatePaymentNodeJS)
